@@ -1,1 +1,1 @@
-In this folder, there are solutions of part 0 exercises 0.4 - 0.6.
+In this folder, there are the solutions of part 0 exercises 0.4 - 0.6.
