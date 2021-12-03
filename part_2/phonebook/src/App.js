@@ -55,6 +55,12 @@ const App = () => {
         setNewName('')
         setNewPhoneNum('')
       })
+      .catch(error => {
+        showNotificationMessage(`Information of ${person.name} has already been removed from the server`, 'error', 5)
+        setPersons(persons.filter(per => per.id !== person.id))
+        setNewName('')
+        setNewPhoneNum('')
+      })
   }
 
   const showNotificationMessage = (message, messageType, timeInSeconds) => {
@@ -80,21 +86,20 @@ const App = () => {
     setSearchName(event.target.value)
   }
 
-  const deletePersonInfo = id => {
-    const person = persons.find(per => per.id === id)
+  const deletePersonInfo = person => {
     window.confirm(`Delete ${person.name} ?`)
     personService
-      .deleteData(id)
+      .deleteData(person.id)
       .then(() => {
         // *response.data returns the empty array back, when I used console to check what response returns from axiox.delete()
         // *then I decided response is useless here, so I use () to instead of it
         // response => {
         // console.log('what is the data deleteData-function returns:--------', response)
-        setPersons(persons.filter(per => per.id !== id))
+        setPersons(persons.filter(per => per.id !== person.id))
       })
       .catch(error => {
         showNotificationMessage(`Information of ${person.name} has already been removed from the server`, 'error', 5)
-        setPersons(persons.filter(per => per.id !== id))
+        setPersons(persons.filter(per => per.id !== person.id))
       })
   }
 
@@ -107,9 +112,9 @@ const App = () => {
       })
   }, [])
 
-  let showAllPersons = persons.map(person => <Person key={person.name} person={person} deletePerson={() => deletePersonInfo(person.id)}/>)
+  let showAllPersons = persons.map(person => <Person key={person.name} person={person} deletePerson={() => deletePersonInfo(person)}/>)
   let searchByName = persons.filter(person => person.name.toLowerCase().includes(searchName.toLowerCase()))
-  let showSearchReasult = searchByName.map(person => <Person key={person.id} person={person} deletePerson={() => deletePersonInfo(person.id)}/>) 
+  let showSearchReasult = searchByName.map(person => <Person key={person.id} person={person} deletePerson={() => deletePersonInfo(person)}/>) 
   
   return (
     <div>
