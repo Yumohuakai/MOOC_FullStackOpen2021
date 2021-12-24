@@ -1,24 +1,44 @@
 import React, {useState} from 'react'
-// import Togglable from './Togglable'
 
-const BlogDetails = ({blog}) => (
+const BlogDetails = ({blog, addLikePoints, deleteBlog, username}) => (
   <div>
     <p>{blog.url}</p>
     <p>
       likes: {blog.likes} &nbsp;
-      <button>like</button>
+      <button onClick={addLikePoints}>like</button>
     </p>
     <p>
       {blog.user
-      ? blog.user.name
-      : '' 
+        ? blog.user.name
+        : '' 
       }
     </p>
+    {blog.user.username === username
+      ? <p><button onClick={deleteBlog}>remove this blog</button></p>
+      : ''
+    }
   </div>
   
 )
-const Blog = ({blog}) => {
+const Blog = ({blog, updateBlog, removeBlog, username}) => {
   const [hideDetails, sethideDetails] = useState(true)
+  const addLikePoints = () => {
+    updateBlog(
+      blog._id, 
+      {user: blog.user
+              ? blog.user.id
+              : null,
+        likes: blog.likes + 1,
+        author: blog.author,
+        title: blog.title,
+        url: blog.url
+      }
+    )
+  }
+
+  const deleteBlog = () => {
+    removeBlog(blog._id)
+  }
 
   return (
     <div  className='blog'>
@@ -28,7 +48,12 @@ const Blog = ({blog}) => {
       </button>
       {hideDetails
         ? ''
-        : <BlogDetails blog={blog}/>
+        : <BlogDetails 
+            blog={blog} 
+            addLikePoints={addLikePoints} 
+            deleteBlog={deleteBlog} 
+            username={username}
+          />
       }
     </div>  
   )

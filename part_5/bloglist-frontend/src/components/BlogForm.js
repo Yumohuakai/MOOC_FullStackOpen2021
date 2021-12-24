@@ -5,19 +5,6 @@ const BlogForm = ({ createBlog }) => {
     const [newAuthor, setNewAuthor] = useState('') 
     const [newUrl, setNewUrl] = useState('') 
 
-//   const handleChange = (event) => {
-//     setNewNote(event.target.value)
-//   }
-
-//   const addNote = (event) => {
-//     event.preventDefault()
-//     createBlog({
-//       content: newNote,
-//       important: Math.random() > 0.5,
-//     })
-//     setNewNote('')
-//   }
-
   const addBlog = (event) => {
     event.preventDefault()
     // console.log(`i will add blog--newTitle - ${newTitle}---newAuthor - ${newAuthor}----newUrl - ${newUrl}--`)
@@ -33,15 +20,6 @@ const BlogForm = ({ createBlog }) => {
 
   return (
     <div>
-      {/* <h2>Create a new note</h2>
-
-      <form onSubmit={addNote}>
-        <input
-          value={newNote}
-          onChange={handleChange}
-        />
-        <button type="submit">save</button>
-      </form> */}
       <form onSubmit={addBlog}>
         <h2>Create a new blog</h2>
         <div>

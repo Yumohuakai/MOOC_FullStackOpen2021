@@ -29,7 +29,7 @@ const App = () => {
       .then(blogs => 
         setBlogs(blogs)
       )  
-      console.log('--------all blogs', blogs)
+      // console.log('--------all blogs', blogs)
     }    
   }, [user])
 
@@ -42,7 +42,7 @@ const App = () => {
 
   const handleLogin = async (event) => {
     event.preventDefault()
-    console.log('logging in with', username, password)
+    // console.log('logging in with', username, password)
     try {
       const user = await loginService.login({username, password,})
       window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user)) 
@@ -89,14 +89,50 @@ const App = () => {
     </form>      
   )
 
+  const removeBlog = (id) => {
+    const blogObject = blogs.find(b => b._id === id)
+    const ok = window.confirm(`Remove blog ${blogObject.title} by ${blogObject.author} ?`)
+    if (ok) {
+      blogService
+      .remove(id)
+      .then(() => {
+        setBlogs(blogs.filter(b => b._id !== id))
+        showNotificationMessage(`Blog ${blogObject.title} by ${blogObject.author} is removed`)
+      })
+      .catch(error =>{
+        if (error.response) {
+          showNotificationMessage(`${error.response.data.error}`, 'error')
+        } else {
+          showNotificationMessage(`${error}`, 'error')
+        }
+        
+      })   
+    }
+       
+  }
+
+  const updateBlog = (id, blogObject) => {
+    blogService
+      .update(id, blogObject)
+      .then(returnedBlog => {
+        setBlogs(blogs.map(b => b._id !== id 
+          ? b 
+          : {
+              ...b, likes: b.likes + 1 
+            }
+        ))
+        showNotificationMessage(`Blog ${returnedBlog.title} by ${returnedBlog.author} is updated`)
+      })      
+  }
+
   const addBlog = (blogObject) => {
     blogFormRef.current.toggleVisibility()
     blogService
       .create(blogObject)
       .then(returnedBlog => {
-        setBlogs(blogs.concat(returnedBlog))
-        // console.log(`A new blog ${returnedBlog.title} by ${returnedBlog.author} added`)
-        showNotificationMessage(`A new blog ${returnedBlog.title} by ${returnedBlog.author} added`)
+        // console.log('A new blog added', returnedBlog)
+        setBlogs(blogs.concat({...returnedBlog, user: user}))
+        showNotificationMessage(`A new blog ${returnedBlog.title} by ${returnedBlog.author} is added`)
       })      
   }
 
@@ -106,6 +142,7 @@ const App = () => {
       <BlogForm createBlog={addBlog} />
     </Togglable>
   )
+
   return (
     <div>
       <Notification 
@@ -122,7 +159,18 @@ const App = () => {
           <div> {blogForm()} </div>
 
           <div>
-            {blogs.map(blog => <Blog key={blog._id} blog={blog} />)}
+            {[].concat(blogs)
+              .sort((a, b) => a.likes > b.likes ? -1 : 1)
+              .map(blog => 
+                <Blog 
+                  key={blog._id} 
+                  blog={blog} 
+                  updateBlog={updateBlog}
+                  removeBlog={removeBlog}
+                  username={user.username}
+                />
+              )
+            }
           </div>
         </div>
       }
