@@ -11,10 +11,7 @@ const App = () => {
   const [notification, setNotification] = useState(null)
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)
-  // const [newTitle, setNewTitle] = useState('') 
-  // const [newAuthor, setNewAuthor] = useState('') 
-  // const [newUrl, setNewUrl] = useState('') 
+  const [user, setUser] = useState(null) 
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -32,6 +29,7 @@ const App = () => {
       .then(blogs => 
         setBlogs(blogs)
       )  
+      console.log('--------all blogs', blogs)
     }    
   }, [user])
 
@@ -91,35 +89,14 @@ const App = () => {
     </form>      
   )
 
-  // const addBlog = (event) => {
-  //   event.preventDefault()
-  //   console.log(`i will add blog--newTitle - ${newTitle}---newAuthor - ${newAuthor}----newUrl - ${newUrl}--`)
-  //   const blogObject = {
-  //     title: newTitle,
-  //     author: newAuthor,
-  //     url: newUrl,
-  //   }
-
-  //   blogService
-  //     .create(blogObject)
-  //     .then(returnedBlog => {
-  //       setBlogs(blogs.concat(returnedBlog))
-  //       showNotificationMessage(`A new blog ${newTitle} by ${newAuthor} added`)
-  //       setNewTitle('')
-  //       setNewAuthor('')
-  //       setNewUrl('')       
-  //     })
-      
-  // }
-
   const addBlog = (blogObject) => {
     blogFormRef.current.toggleVisibility()
     blogService
       .create(blogObject)
       .then(returnedBlog => {
         setBlogs(blogs.concat(returnedBlog))
-        console.log(`A new blog ${returnedBlog.title} by ${returnedBlog.author} added`)
-        // showNotificationMessage(`A new blog ${newTitle} by ${newAuthor} added`)
+        // console.log(`A new blog ${returnedBlog.title} by ${returnedBlog.author} added`)
+        showNotificationMessage(`A new blog ${returnedBlog.title} by ${returnedBlog.author} added`)
       })      
   }
 
@@ -129,41 +106,6 @@ const App = () => {
       <BlogForm createBlog={addBlog} />
     </Togglable>
   )
-  // const blogForm = () => (
-  //   <form onSubmit={addBlog}>
-  //     <h2>Create a new blog</h2>
-  //     <div>
-  //       title:  &nbsp;
-  //       <input
-  //       type="text"
-  //       value={newTitle}
-  //       name="title"
-  //       onChange={({ target }) => setNewTitle(target.value)}
-  //       />
-  //     </div>
-  //     <div>
-  //       author:  &nbsp;
-  //       <input
-  //       type="text"
-  //       value={newAuthor}
-  //       name="author"
-  //       onChange={({ target }) => setNewAuthor(target.value)}
-  //       />
-  //     </div>
-  //     <div>
-  //       url:  &nbsp;
-  //       <input
-  //       type="text"
-  //       value={newUrl}
-  //       name="url"
-  //       onChange={({ target }) => setNewUrl(target.value)}
-  //       />
-  //     </div>      
-  //     <button type="submit">create</button>
-  //   </form>
-  // )
-
-
   return (
     <div>
       <Notification 
