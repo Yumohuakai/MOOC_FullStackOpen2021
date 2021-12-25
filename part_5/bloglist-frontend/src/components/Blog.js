@@ -1,25 +1,6 @@
 import React, { useState } from 'react'
+import BlogDetails from './BlogDetails'
 
-const BlogDetails = ({ blog, addLikePoints, deleteBlog, username }) => (
-  <div>
-    <p>{blog.url}</p>
-    <p>
-      likes: {blog.likes} &nbsp;
-      <button onClick={addLikePoints}>like</button>
-    </p>
-    <p>
-      {blog.user
-        ? blog.user.name
-        : ''
-      }
-    </p>
-    {blog.user.username === username
-      ? <p><button onClick={deleteBlog}>remove this blog</button></p>
-      : ''
-    }
-  </div>
-
-)
 const Blog = ({ blog, updateBlog, removeBlog, username }) => {
   const [hideDetails, sethideDetails] = useState(true)
   const addLikePoints = () => {
@@ -39,13 +20,13 @@ const Blog = ({ blog, updateBlog, removeBlog, username }) => {
   const deleteBlog = () => {
     removeBlog(blog._id)
   }
+  const showMoreDetails = () => sethideDetails(!hideDetails)
+  const label = hideDetails ? 'view' : 'hide'
 
   return (
     <div  className='blog'>
       {blog.title} - {blog.author} &nbsp;
-      <button onClick={() => sethideDetails(!hideDetails)}>
-        {hideDetails ? 'view' : 'hide' }
-      </button>
+      <button onClick={showMoreDetails}> {label} </button>
       {hideDetails
         ? ''
         : <BlogDetails
