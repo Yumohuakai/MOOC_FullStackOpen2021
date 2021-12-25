@@ -4,14 +4,14 @@ import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import BlogForm from './components/BlogForm'
 import blogService from './services/blogs'
-import loginService from './services/login' 
+import loginService from './services/login'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [notification, setNotification] = useState(null)
-  const [username, setUsername] = useState('') 
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null) 
+  const [user, setUser] = useState(null)
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -25,16 +25,16 @@ const App = () => {
   useEffect(() => {
     if (user) {
       blogService
-      .getAll()
-      .then(blogs => 
-        setBlogs(blogs)
-      )  
+        .getAll()
+        .then(blogs =>
+          setBlogs(blogs)
+        )
       // console.log('--------all blogs', blogs)
-    }    
+    }
   }, [user])
 
   const showNotificationMessage = (message, type='success', timeInSeconds=5) => {
-    setNotification({message, type})
+    setNotification({ message, type })
     setTimeout(() => {
       setNotification(null)
     }, timeInSeconds*1000)
@@ -44,15 +44,15 @@ const App = () => {
     event.preventDefault()
     // console.log('logging in with', username, password)
     try {
-      const user = await loginService.login({username, password,})
-      window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user)) 
+      const user = await loginService.login({ username, password, })
+      window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
       // console.log('login in user token----------', user.token)
       blogService.setToken(user.token)
       setUser(user)
       showNotificationMessage('Login succeed')
       setUsername('')
       setPassword('')
-    } catch (exception) {      
+    } catch (exception) {
       showNotificationMessage('Wrong username or password', 'error')
     }
   }
@@ -69,7 +69,7 @@ const App = () => {
       <h2>Login</h2>
       <div>
         username  &nbsp;
-          <input
+        <input
           type="text"
           value={username}
           name="Username"
@@ -78,7 +78,7 @@ const App = () => {
       </div>
       <div>
         password  &nbsp;
-          <input
+        <input
           type="password"
           value={password}
           name="Password"
@@ -86,7 +86,7 @@ const App = () => {
         />
       </div>
       <button type="submit">login</button>
-    </form>      
+    </form>
   )
 
   const removeBlog = (id) => {
@@ -94,35 +94,35 @@ const App = () => {
     const ok = window.confirm(`Remove blog ${blogObject.title} by ${blogObject.author} ?`)
     if (ok) {
       blogService
-      .remove(id)
-      .then(() => {
-        setBlogs(blogs.filter(b => b._id !== id))
-        showNotificationMessage(`Blog ${blogObject.title} by ${blogObject.author} is removed`)
-      })
-      .catch(error =>{
-        if (error.response) {
-          showNotificationMessage(`${error.response.data.error}`, 'error')
-        } else {
-          showNotificationMessage(`${error}`, 'error')
-        }
-        
-      })   
+        .remove(id)
+        .then(() => {
+          setBlogs(blogs.filter(b => b._id !== id))
+          showNotificationMessage(`Blog ${blogObject.title} by ${blogObject.author} is removed`)
+        })
+        .catch(error => {
+          if (error.response) {
+            showNotificationMessage(`${error.response.data.error}`, 'error')
+          } else {
+            showNotificationMessage(`${error}`, 'error')
+          }
+
+        })
     }
-       
+
   }
 
   const updateBlog = (id, blogObject) => {
     blogService
       .update(id, blogObject)
       .then(returnedBlog => {
-        setBlogs(blogs.map(b => b._id !== id 
-          ? b 
+        setBlogs(blogs.map(b => b._id !== id
+          ? b
           : {
-              ...b, likes: b.likes + 1 
-            }
+            ...b, likes: b.likes + 1
+          }
         ))
         showNotificationMessage(`Blog ${returnedBlog.title} by ${returnedBlog.author} is updated`)
-      })      
+      })
   }
 
   const addBlog = (blogObject) => {
@@ -131,9 +131,9 @@ const App = () => {
       .create(blogObject)
       .then(returnedBlog => {
         // console.log('A new blog added', returnedBlog)
-        setBlogs(blogs.concat({...returnedBlog, user: user}))
+        setBlogs(blogs.concat({ ...returnedBlog, user: user }))
         showNotificationMessage(`A new blog ${returnedBlog.title} by ${returnedBlog.author} is added`)
-      })      
+      })
   }
 
   const blogFormRef = useRef()
@@ -145,26 +145,26 @@ const App = () => {
 
   return (
     <div>
-      <Notification 
-        notification={notification} 
+      <Notification
+        notification={notification}
       />
       {user === null ?
         loginForm() :
         <div>
-          <h2>blogs</h2>
+          <h2>Blogs</h2>
           <p>
             {user.name} logged in &nbsp;
             <button onClick={handleLogout}> logout </button>
-          </p> 
+          </p>
           <div> {blogForm()} </div>
 
           <div>
             {[].concat(blogs)
               .sort((a, b) => a.likes > b.likes ? -1 : 1)
-              .map(blog => 
-                <Blog 
-                  key={blog._id} 
-                  blog={blog} 
+              .map(blog =>
+                <Blog
+                  key={blog._id}
+                  blog={blog}
                   updateBlog={updateBlog}
                   removeBlog={removeBlog}
                   username={user.username}

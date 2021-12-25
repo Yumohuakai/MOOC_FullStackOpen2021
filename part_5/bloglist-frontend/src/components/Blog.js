@@ -1,6 +1,6 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 
-const BlogDetails = ({blog, addLikePoints, deleteBlog, username}) => (
+const BlogDetails = ({ blog, addLikePoints, deleteBlog, username }) => (
   <div>
     <p>{blog.url}</p>
     <p>
@@ -10,7 +10,7 @@ const BlogDetails = ({blog, addLikePoints, deleteBlog, username}) => (
     <p>
       {blog.user
         ? blog.user.name
-        : '' 
+        : ''
       }
     </p>
     {blog.user.username === username
@@ -18,20 +18,20 @@ const BlogDetails = ({blog, addLikePoints, deleteBlog, username}) => (
       : ''
     }
   </div>
-  
+
 )
-const Blog = ({blog, updateBlog, removeBlog, username}) => {
+const Blog = ({ blog, updateBlog, removeBlog, username }) => {
   const [hideDetails, sethideDetails] = useState(true)
   const addLikePoints = () => {
     updateBlog(
-      blog._id, 
-      {user: blog.user
-              ? blog.user.id
-              : null,
-        likes: blog.likes + 1,
-        author: blog.author,
-        title: blog.title,
-        url: blog.url
+      blog._id,
+      { user: blog.user
+        ? blog.user.id
+        : null,
+      likes: blog.likes + 1,
+      author: blog.author,
+      title: blog.title,
+      url: blog.url
       }
     )
   }
@@ -48,14 +48,14 @@ const Blog = ({blog, updateBlog, removeBlog, username}) => {
       </button>
       {hideDetails
         ? ''
-        : <BlogDetails 
-            blog={blog} 
-            addLikePoints={addLikePoints} 
-            deleteBlog={deleteBlog} 
-            username={username}
-          />
+        : <BlogDetails
+          blog={blog}
+          addLikePoints={addLikePoints}
+          deleteBlog={deleteBlog}
+          username={username}
+        />
       }
-    </div>  
+    </div>
   )
 }
 export default Blog
