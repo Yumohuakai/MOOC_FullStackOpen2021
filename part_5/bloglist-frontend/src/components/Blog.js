@@ -30,6 +30,7 @@ const Blog = ({ blog, updateBlog, removeBlog, username }) => {
       {hideDetails
         ? ''
         : <BlogDetails
+          key={blog._id}
           blog={blog}
           addLikePoints={addLikePoints}
           deleteBlog={deleteBlog}

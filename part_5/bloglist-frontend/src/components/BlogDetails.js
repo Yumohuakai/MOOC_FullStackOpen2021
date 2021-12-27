@@ -5,7 +5,7 @@ const BlogDetails = ({ blog, addLikePoints, deleteBlog, username }) => (
     <p>{blog.url}</p>
     <p className='like'>
       likes: {blog.likes} &nbsp;
-      <button onClick={addLikePoints}>like</button>
+      <button id={blog._id} onClick={addLikePoints}>like</button>
     </p>
     <p>
       {blog.user
