@@ -24,7 +24,7 @@ const Blog = ({ blog, updateBlog, removeBlog, username }) => {
   const label = hideDetails ? 'view' : 'hide'
 
   return (
-    <div  className='blog'>
+    <div className='blog'>
       {blog.title} - {blog.author} &nbsp;
       <button onClick={showMoreDetails}> {label} </button>
       {hideDetails
