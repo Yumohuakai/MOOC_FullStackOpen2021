@@ -9,25 +9,41 @@ import {
   useHistory,
 } from "react-router-dom"
 
+let createdSucceed
 
-const Menu = ({addNew, anecdotes}) => {
+const Menu = ({addNew, anecdotes, showNotificationMessage, notification}) => {
   const padding = {
     paddingRight: 5
   }
+
+  console.log('did you find anecdotes----------', anecdotes)
+  const match = useRouteMatch('/anecdotes/:id')
+  console.log('did you find match----------', match)
+  const anecdote = match 
+    ? anecdotes.find(anecdote => anecdote.id === match.params.id)
+    : null
+
+  console.log('did you find anecdote----------', anecdote)
+
   return (
     <div>
       <div>
         <Link style={padding} to="/">anecdotes</Link>
         <Link style={padding} to="/create">create new</Link>
         <Link style={padding} to="/about">about</Link>
+        <Notification notification={notification} /> 
       </div>
 
-      <Switch>
+      <Switch>  
+        <Route path="/anecdotes/:id">
+          <Anecdote anecdote={anecdote} />
+        </Route>      
         <Route path="/about">
           <About />
         </Route>
         <Route path="/create">
-          <CreateNew addNew={addNew} />
+          <CreateNew addNew={addNew} showNotificationMessage={showNotificationMessage} /> 
+          {createdSucceed ? <Redirect to="/" /> : null}
         </Route>
         <Route path="/">
           <AnecdoteList anecdotes={anecdotes} />
@@ -40,11 +56,25 @@ const Menu = ({addNew, anecdotes}) => {
   )
 }
 
+const Anecdote = ({ anecdote }) => {
+  return (
+    <div>
+      <h2>{anecdote.content} by {anecdote.author}</h2>
+      <div>has {anecdote.votes} votes</div>
+      <div>for more info see {anecdote.info}</div>
+    </div>
+  )
+}
+
 const AnecdoteList = ({ anecdotes }) => (
   <div>
     <h2>Anecdotes</h2>
     <ul>
-      {anecdotes.map(anecdote => <li key={anecdote.id} >{anecdote.content}</li>)}
+      {anecdotes.map(anecdote => 
+        <li key={anecdote.id} >
+          <Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link>
+        </li>
+      )}
     </ul>
   </div>
 )
@@ -72,6 +102,7 @@ const Footer = () => (
 )
 
 const CreateNew = (props) => {
+  createdSucceed = 0
   const [content, setContent] = useState('')
   const [author, setAuthor] = useState('')
   const [info, setInfo] = useState('')
@@ -85,6 +116,8 @@ const CreateNew = (props) => {
       info,
       votes: 0
     })
+    props.showNotificationMessage(`a new anecdote ${content} created !`)
+    createdSucceed = 1
   }
 
   return (
@@ -110,6 +143,26 @@ const CreateNew = (props) => {
 
 }
 
+const Notification = ({ notification}) => {
+  const notificationStyle = {
+    color: 'green',
+    fontStyle: 'italic',
+    fontSize: 16, 
+    background: 'lightgrey',
+    borderStyle: 'solid'
+  }
+
+  if (notification === null) {
+    return null
+  }
+
+  return (
+    <div style={notificationStyle}>
+      {notification.message}
+    </div>
+  )
+}
+
 const App = () => {
   const [anecdotes, setAnecdotes] = useState([
     {
@@ -127,8 +180,15 @@ const App = () => {
       id: '2'
     }
   ])
+  
+  const [notification, setNotification] = useState(null)
 
-  const [notification, setNotification] = useState('')
+  const showNotificationMessage = (message, type='success', timeInSeconds=10) => {
+    setNotification({message, type})
+    setTimeout(() => {
+      setNotification(null)
+    }, timeInSeconds*1000)
+  }
 
   const addNew = (anecdote) => {
     anecdote.id = (Math.random() * 10000).toFixed(0)
@@ -152,7 +212,12 @@ const App = () => {
   return (
     <div>
       <h1>Software anecdotes</h1>
-      <Menu addNew={addNew} anecdotes={anecdotes} />      
+      <Menu 
+        addNew={addNew} 
+        anecdotes={anecdotes} 
+        showNotificationMessage={showNotificationMessage}
+        notification={notification} 
+      />           
       <Footer />
     </div>
   )
