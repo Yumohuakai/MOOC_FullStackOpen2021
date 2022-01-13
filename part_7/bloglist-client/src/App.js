@@ -2,6 +2,9 @@ import React, { useState } from 'react'
 // import loginService from './services/login'
 import { useDispatch, useSelector } from 'react-redux'
 import { loginUser, logoutUser } from './reducers/userReducer'
+import { addMessage } from './reducers/notificationReducer'
+import Notification from './components/Notification'
+// import Togglable from './components/Togglable'
 
 const useField = (type) => {
   const [value, setValue] = useState('')
@@ -36,6 +39,7 @@ const App = () => {
   const handleLogin = async (event) => {
     event.preventDefault()
     dispatch(loginUser(username.value, password.value ))
+    dispatch(addMessage('Login succeed', 5))
     // setUsername('')
     // setPassword('')
     // username.resetValue()
@@ -50,6 +54,7 @@ const App = () => {
     // setUser(null)
     // showNotificationMessage('Logout succeed')
     dispatch(logoutUser())
+    dispatch(addMessage('Logout succeed', 5))
   }
 
   const loginedUser = useSelector(state => state)
@@ -87,6 +92,7 @@ const App = () => {
 
   return (
     <div>
+      <Notification />
       {loginedUser.user === null && loginForm()}
       {loginedUser.user !== null && homepage()}
     </div>
