@@ -2,16 +2,19 @@ import blogService from '../services/blogs'
 
 const bylikes = (b1, b2) => b2.likes - b1.likes
 
-const blogReducer = (state = [], action) => {
+const blogReducer = (state = null, action) => {
   switch(action.type) {
   case 'INIT':
     return action.data
   case 'CREATE':
     return [ ...state, action.data]
-  case 'LIKE': {
+  case 'LIKE':
+  {
     const liked = action.data
     return state.map(b => b._id===liked._id ? liked : b).sort(bylikes)
   }
+  default:
+    return state
   }
 }
 
