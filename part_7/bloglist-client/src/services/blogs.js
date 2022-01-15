@@ -4,13 +4,13 @@ const baseUrl = '/api/blogs'
 let token = null
 
 const setToken = newToken => {
-  console.log('--------blogservice-------newToken', newToken)
+  // console.log('--------blogservice-------newToken', newToken)
   token = `bearer ${newToken}`
-  console.log('--------blogservice-------token', token)
+  // console.log('--------blogservice-------token', token)
 }
 
 const getAll = async () => {
-  console.log('--------blogservice-----getAll-----token', token)
+  // console.log('--------blogservice-----getAll-----token', token)
   const config = {
     headers: { Authorization: token },
   }
@@ -27,8 +27,6 @@ const create = async newObject => {
 }
 
 const update = async (newObject) => {
-  // console.log('-----services-blogs.js-update-id-------------', newObject._id)
-  // console.log('-----services-blogs.js-update object-------------', newObject)
   const config = {
     headers: { Authorization: token },
   }
@@ -37,7 +35,6 @@ const update = async (newObject) => {
 }
 
 const remove = async (id) => {
-  // console.log('-----services-blogs.js-update-id-------------', id)
   const config = {
     headers: { Authorization: token },
   }
