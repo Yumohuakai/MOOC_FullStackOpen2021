@@ -1,32 +1,47 @@
-import React, { useState, useEffect, useRef } from 'react'
+// import React, { useState, useEffect, useRef } from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { loginUser, logoutUser, getUserFromLocalStorage } from './reducers/userReducer'
 import { addMessage } from './reducers/notificationReducer'
 import Notification from './components/Notification'
-import BlogList from './components/BlogList'
-import { initializeBlogs, createBlog, deleteBlog, likeBlog } from './reducers/blogReducer'
+// import BlogList from './components/BlogList'
+// import { initializeBlogs, createBlog, deleteBlog, likeBlog } from './reducers/blogReducer'
+import { initializeBlogs } from './reducers/blogReducer'
 import blogService from './services/blogs'
-import Togglable from './components/Togglable'
-import BlogForm from './components/BlogForm'
+// import Togglable from './components/Togglable'
+// import BlogForm from './components/BlogForm'
+import Users from './components/Users'
+import Home from './components/Home'
+import { useField } from './customFormHook'
 
-const useField = (type) => {
-  const [value, setValue] = useState('')
+import {
+  // BrowserRouter as Router,
+  Switch,
+  Route
+  // Link,
+  // Redirect,
+  // useRouteMatch,
+  // useHistory,
+} from 'react-router-dom'
 
-  const onChange = (event) => {
-    setValue(event.target.value)
-  }
+// const useField = (type) => {
+//   const [value, setValue] = useState('')
 
-  const resetValue = () => {
-    setValue('')
-  }
+//   const onChange = (event) => {
+//     setValue(event.target.value)
+//   }
 
-  return {
-    type,
-    value,
-    onChange,
-    resetValue
-  }
-}
+//   const resetValue = () => {
+//     setValue('')
+//   }
+
+//   return {
+//     type,
+//     value,
+//     onChange,
+//     resetValue
+//   }
+// }
 
 const App = () => {
   const username = useField('text')
@@ -35,12 +50,12 @@ const App = () => {
   const { [removeProp]: resetValueOfUsername, ...restOfUsername } = username
   const { [removeProp]: resetValueOfPassword, ...restOfPassword } = password
 
-  const newTitle = useField('text')
-  const newAuthor = useField('text')
-  const newUrl = useField('text')
-  const { [removeProp]: resetValueOfNewTitle, ...restOfNewTitle } = newTitle
-  const { [removeProp]: resetValueOfNewAuthor, ...restOfNewAuthor } = newAuthor
-  const { [removeProp]: resetValueOfNewUrl, ...restOfNewUrl } = newUrl
+  // const newTitle = useField('text')
+  // const newAuthor = useField('text')
+  // const newUrl = useField('text')
+  // const { [removeProp]: resetValueOfNewTitle, ...restOfNewTitle } = newTitle
+  // const { [removeProp]: resetValueOfNewAuthor, ...restOfNewAuthor } = newAuthor
+  // const { [removeProp]: resetValueOfNewUrl, ...restOfNewUrl } = newUrl
 
   const dispatch = useDispatch()
 
@@ -82,45 +97,45 @@ const App = () => {
     dispatch(addMessage('Logout succeed', 5))
   }
 
-  const addBlog = (blogObject) => {
-    blogFormRef.current.toggleVisibility()
-    dispatch(createBlog(blogObject, loginedUser.user))
-    dispatch(addMessage(`A new blog ${blogObject.title} by ${blogObject.author} is added`, 5))
-  }
+  // const addBlog = (blogObject) => {
+  //   blogFormRef.current.toggleVisibility()
+  //   dispatch(createBlog(blogObject, loginedUser.user))
+  //   dispatch(addMessage(`A new blog ${blogObject.title} by ${blogObject.author} is added`, 5))
+  // }
 
-  const removeBlog = (id) => {
-    const blogObject = loginedUser.blogs.find(b => b._id === id)
-    const ok = window.confirm(`Remove blog ${blogObject.title} by ${blogObject.author} ?`)
-    if (ok) {
-      try {
-        dispatch(deleteBlog(id))
-        dispatch(addMessage(`Blog ${blogObject.title} by ${blogObject.author} is removed`, 5))
-      } catch (exception) {
-        console.log('what is the exception happened when remove a blog', exception)
-        dispatch(addMessage('something wrong', 5))
-      }
-    }
-  }
+  // const removeBlog = (id) => {
+  //   const blogObject = loginedUser.blogs.find(b => b._id === id)
+  //   const ok = window.confirm(`Remove blog ${blogObject.title} by ${blogObject.author} ?`)
+  //   if (ok) {
+  //     try {
+  //       dispatch(deleteBlog(id))
+  //       dispatch(addMessage(`Blog ${blogObject.title} by ${blogObject.author} is removed`, 5))
+  //     } catch (exception) {
+  //       console.log('what is the exception happened when remove a blog', exception)
+  //       dispatch(addMessage('something wrong', 5))
+  //     }
+  //   }
+  // }
 
-  const updateBlog = (blogObject) => {
-    dispatch(likeBlog(blogObject))
-    dispatch(addMessage(`Blog ${blogObject.title} by ${blogObject.author} is updated`, 5))
-  }
+  // const updateBlog = (blogObject) => {
+  //   dispatch(likeBlog(blogObject))
+  //   dispatch(addMessage(`Blog ${blogObject.title} by ${blogObject.author} is updated`, 5))
+  // }
 
-  const blogFormRef = useRef()
-  const blogForm = () => (
-    <Togglable buttonLabel='create new blog' ref={blogFormRef}>
-      <BlogForm
-        newBlog={addBlog}
-        resetValueOfNewTitle={resetValueOfNewTitle}
-        restOfNewTitle={restOfNewTitle}
-        resetValueOfNewAuthor={resetValueOfNewAuthor}
-        restOfNewAuthor={restOfNewAuthor}
-        resetValueOfNewUrl={resetValueOfNewUrl}
-        restOfNewUrl={restOfNewUrl}
-      />
-    </Togglable>
-  )
+  // const blogFormRef = useRef()
+  // const blogForm = () => (
+  //   <Togglable buttonLabel='create new blog' ref={blogFormRef}>
+  //     <BlogForm
+  //       newBlog={addBlog}
+  //       resetValueOfNewTitle={resetValueOfNewTitle}
+  //       restOfNewTitle={restOfNewTitle}
+  //       resetValueOfNewAuthor={resetValueOfNewAuthor}
+  //       restOfNewAuthor={restOfNewAuthor}
+  //       resetValueOfNewUrl={resetValueOfNewUrl}
+  //       restOfNewUrl={restOfNewUrl}
+  //     />
+  //   </Togglable>
+  // )
 
   const loginForm = () => (
     <div>
@@ -148,8 +163,14 @@ const App = () => {
             &nbsp;
         <button onClick={handleLogout}> logout </button>
       </p>
-      <div> {blogForm()} </div>
-      <BlogList removeBlog={removeBlog} updateBlog={updateBlog} />
+      <Switch>
+        <Route path="/users">
+          <Users />
+        </Route>
+        <Route path="/">
+          <Home />
+        </Route>
+      </Switch>
     </div>
   )
 
