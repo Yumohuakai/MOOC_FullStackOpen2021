@@ -22,21 +22,30 @@ const Users = () => {
         .then(users =>
           setUsers(users)
         )
-      console.log('--------all users', users)
+      // console.log('--------all users', users)
     }
   }, [user])
 
   return (
     <div>
       <h3>USER LIST</h3>
-      {
-        users
-          ? users.map(u =>
-            <p key={u.id}>
-              {u.name}
-            </p>)
-          : null
-      }
+      <table>
+        <tbody>
+          <tr>
+            <th> </th>
+            <th>blogs created</th>
+          </tr>
+          {
+            users
+              ? users.map(u =>
+                <tr key={u.id}>
+                  <td> {u.name} </td>
+                  <td> {u.blogs.length} </td>
+                </tr>)
+              : null
+          }
+        </tbody>
+      </table>
     </div>
   )
 }
