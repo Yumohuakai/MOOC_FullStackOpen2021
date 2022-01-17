@@ -1,74 +1,38 @@
-// import React, { useState, useEffect, useRef } from 'react'
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { loginUser, logoutUser, getUserFromLocalStorage } from './reducers/userReducer'
 import { addMessage } from './reducers/notificationReducer'
 import Notification from './components/Notification'
-// import BlogList from './components/BlogList'
-// import { initializeBlogs, createBlog, deleteBlog, likeBlog } from './reducers/blogReducer'
 import { initializeBlogs } from './reducers/blogReducer'
 import blogService from './services/blogs'
-// import Togglable from './components/Togglable'
-// import BlogForm from './components/BlogForm'
 import Users from './components/Users'
+import User from './components/User'
 import Home from './components/Home'
 import { useField } from './customFormHook'
+import userService from './services/users'
 
 import {
-  // BrowserRouter as Router,
   Switch,
-  Route
-  // Link,
-  // Redirect,
-  // useRouteMatch,
-  // useHistory,
+  Route,
+  useRouteMatch,
 } from 'react-router-dom'
 
-// const useField = (type) => {
-//   const [value, setValue] = useState('')
-
-//   const onChange = (event) => {
-//     setValue(event.target.value)
-//   }
-
-//   const resetValue = () => {
-//     setValue('')
-//   }
-
-//   return {
-//     type,
-//     value,
-//     onChange,
-//     resetValue
-//   }
-// }
-
 const App = () => {
-  const username = useField('text')
-  const password = useField('text')
-  const removeProp = 'resetValue'
-  const { [removeProp]: resetValueOfUsername, ...restOfUsername } = username
-  const { [removeProp]: resetValueOfPassword, ...restOfPassword } = password
-
-  // const newTitle = useField('text')
-  // const newAuthor = useField('text')
-  // const newUrl = useField('text')
-  // const { [removeProp]: resetValueOfNewTitle, ...restOfNewTitle } = newTitle
-  // const { [removeProp]: resetValueOfNewAuthor, ...restOfNewAuthor } = newAuthor
-  // const { [removeProp]: resetValueOfNewUrl, ...restOfNewUrl } = newUrl
-
   const dispatch = useDispatch()
 
   const loginedUser = useSelector(state => state)
   // console.log('what is user----', loginedUser)
 
+
+  /**********************************keep logined user***************************/
   useEffect(() => {
     if (loginedUser.user) {
       dispatch(initializeBlogs())
       // console.log('--------all blogs', loginedUser.blogs)
     }
   }, [loginedUser.user, dispatch])
-
+  /****************************************************************************/
+  /***************************blog list****************************************/
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
     // console.log('--------loggedUserJSON-----------', loggedUserJSON)
@@ -79,6 +43,37 @@ const App = () => {
       blogService.setToken(localUser.token)
     }
   }, [])
+  /*****************************************************************************/
+  /**********************************user list**********************************/
+  const [users, setUsers] = useState(null)
+  useEffect(() => {
+    if (loginedUser.user) {
+      userService
+        .getAll()
+        .then(users =>
+          setUsers(users)
+        )
+    // console.log('--------all users', users)
+    }
+  }, [loginedUser.user])
+
+  const match = useRouteMatch('/users/:id')
+
+  let singleUser
+  if (match && users) {
+    // console.log('what is id........', match.params.id)
+    singleUser = users.find(u => u.id === match.params.id)
+    // console.log('what is singleUser----Users--myuser--', singleUser)
+  }
+  /****************************************************************************/
+
+  /*******************************user login/logout*****************************/
+  // user login/logout part
+  const username = useField('text')
+  const password = useField('text')
+  const removeProp = 'resetValue'
+  const { [removeProp]: resetValueOfUsername, ...restOfUsername } = username
+  const { [removeProp]: resetValueOfPassword, ...restOfPassword } = password
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -97,49 +92,9 @@ const App = () => {
     dispatch(addMessage('Logout succeed', 5))
   }
 
-  // const addBlog = (blogObject) => {
-  //   blogFormRef.current.toggleVisibility()
-  //   dispatch(createBlog(blogObject, loginedUser.user))
-  //   dispatch(addMessage(`A new blog ${blogObject.title} by ${blogObject.author} is added`, 5))
-  // }
-
-  // const removeBlog = (id) => {
-  //   const blogObject = loginedUser.blogs.find(b => b._id === id)
-  //   const ok = window.confirm(`Remove blog ${blogObject.title} by ${blogObject.author} ?`)
-  //   if (ok) {
-  //     try {
-  //       dispatch(deleteBlog(id))
-  //       dispatch(addMessage(`Blog ${blogObject.title} by ${blogObject.author} is removed`, 5))
-  //     } catch (exception) {
-  //       console.log('what is the exception happened when remove a blog', exception)
-  //       dispatch(addMessage('something wrong', 5))
-  //     }
-  //   }
-  // }
-
-  // const updateBlog = (blogObject) => {
-  //   dispatch(likeBlog(blogObject))
-  //   dispatch(addMessage(`Blog ${blogObject.title} by ${blogObject.author} is updated`, 5))
-  // }
-
-  // const blogFormRef = useRef()
-  // const blogForm = () => (
-  //   <Togglable buttonLabel='create new blog' ref={blogFormRef}>
-  //     <BlogForm
-  //       newBlog={addBlog}
-  //       resetValueOfNewTitle={resetValueOfNewTitle}
-  //       restOfNewTitle={restOfNewTitle}
-  //       resetValueOfNewAuthor={resetValueOfNewAuthor}
-  //       restOfNewAuthor={restOfNewAuthor}
-  //       resetValueOfNewUrl={resetValueOfNewUrl}
-  //       restOfNewUrl={restOfNewUrl}
-  //     />
-  //   </Togglable>
-  // )
-
   const loginForm = () => (
     <div>
-      <h2>Login</h2>
+      <h1>Login</h1>
       <form onSubmit={handleLogin}>
         <div>
         username
@@ -154,18 +109,22 @@ const App = () => {
     </div>
 
   )
+  /****************************************************************************/
 
   const homepage = () => (
     <div>
-      <h2>Blogs App</h2>
+      <h1>Blogs App</h1>
       <p>
         {loginedUser.user.name} logged-in
             &nbsp;
         <button onClick={handleLogout}> logout </button>
       </p>
       <Switch>
+        <Route path="/users/:id">
+          <User singleUser={singleUser} />
+        </Route>
         <Route path="/users">
-          <Users />
+          <Users users={users} />
         </Route>
         <Route path="/">
           <Home />

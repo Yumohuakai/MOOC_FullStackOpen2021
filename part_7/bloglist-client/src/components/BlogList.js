@@ -16,7 +16,7 @@ const BlogList = ({ removeBlog, updateBlog }) => {
 
   return(
     <div>
-      <h3>BLOG LIST</h3>
+      <h2>BLOG LIST</h2>
       {blogs === null
         ? <p>no data</p>
         :[].concat(blogs)

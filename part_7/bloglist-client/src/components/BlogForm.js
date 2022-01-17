@@ -17,7 +17,7 @@ const BlogForm = ({ newBlog, resetValueOfNewTitle, restOfNewTitle, resetValueOfN
   return (
     <div>
       <form onSubmit={addBlog}>
-        <h2>Create a new blog</h2>
+        <h1>Create a new blog</h1>
         <div>
             title:  &nbsp;
           <input { ...restOfNewTitle} />

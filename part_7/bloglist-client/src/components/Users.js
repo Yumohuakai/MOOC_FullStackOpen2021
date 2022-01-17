@@ -1,34 +1,14 @@
-import React, { useState, useEffect } from 'react'
-import userService from '../services/users'
-import { useSelector } from 'react-redux'
+import React from 'react'
+import { Link } from 'react-router-dom'
 
-const Users = () => {
-  const [users, setUsers] = useState(null)
-
-  // const blogs = useSelector(({ blogs }) => {
-  //     // console.log('inside BlogList----------blogs--', blogs)
-  //     return blogs
-  //   })
-
-  const user = useSelector(({ user }) => {
-    // console.log('inside BlogList--------user----', user)
-    return user
-  })
-
-  useEffect(() => {
-    if (user) {
-      userService
-        .getAll()
-        .then(users =>
-          setUsers(users)
-        )
-      // console.log('--------all users', users)
-    }
-  }, [user])
+const Users = ({ users }) => {
+  const padding = {
+    padding: 5
+  }
 
   return (
     <div>
-      <h3>USER LIST</h3>
+      <h2>USER LIST</h2>
       <table>
         <tbody>
           <tr>
@@ -39,7 +19,7 @@ const Users = () => {
             users
               ? users.map(u =>
                 <tr key={u.id}>
-                  <td> {u.name} </td>
+                  <td> <Link style={padding} to={`/users/${u.id}`}>{u.name}</Link> </td>
                   <td> {u.blogs.length} </td>
                 </tr>)
               : null
