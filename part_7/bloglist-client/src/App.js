@@ -15,6 +15,7 @@ import { getDeletedSucceed } from './components/Blog'
 
 import {
   Switch,
+  Link,
   Route,
   Redirect,
   useRouteMatch,
@@ -107,6 +108,7 @@ const App = () => {
 
   const loginForm = () => (
     <div>
+      <Notification />
       <h1>Login</h1>
       <form onSubmit={handleLogin}>
         <div>
@@ -124,37 +126,51 @@ const App = () => {
   )
   /****************************************************************************/
 
-  const homepage = () => (
-    <div>
-      <h1>Blogs App</h1>
-      <p>
-        {loginedUser.user.name} logged-in
-            &nbsp;
-        <button onClick={handleLogout}> logout </button>
-      </p>
-      <Switch>
-        <Route path="/blogs/:id">
-          <Blog blog={blog} username={loginedUser.user.username} />
-          {isRemoved ? <Redirect to="/" /> : null}
-        </Route>
-        <Route path="/users/:id">
-          <User singleUser={singleUser} />
-        </Route>
-        <Route path="/users">
-          <UserList users={users} />
-        </Route>
-        <Route path="/">
-          <Home />
-        </Route>
-      </Switch>
-    </div>
-  )
-
+  const homepage = () => {
+  //   const padding = {
+  //     padding: 5
+  //   }
+    return (
+      <div>
+        <div className='navigation'>
+          <Link className='linkStyle' to="/">blogs</Link>
+          <Link className='linkStyle' to="/users">users</Link>
+          <span className='loginUserInfo'>
+            {loginedUser.user
+              ? <em>{loginedUser.user.name} logged-in</em>
+              : null
+            }
+          </span>
+          <span className='logoutButton'>
+            <button onClick={handleLogout}> logout </button>
+          </span>
+        </div>
+        <Notification />
+        <h1>Blogs App</h1>
+        <Switch>
+          <Route path="/blogs/:id">
+            <Blog blog={blog} username={loginedUser.user.username} />
+            {isRemoved ? <Redirect to="/" /> : null}
+          </Route>
+          <Route path="/users/:id">
+            <User singleUser={singleUser} />
+          </Route>
+          <Route path="/users">
+            <UserList users={users} />
+          </Route>
+          <Route path="/">
+            <Home />
+          </Route>
+        </Switch>
+      </div>
+    )
+  }
   return (
     <div>
-      <Notification />
-      {loginedUser.user === null && loginForm()}
-      {loginedUser.user !== null && homepage()}
+      {loginedUser.user
+        ? homepage()
+        : loginForm()
+      }
     </div>
   )
 }

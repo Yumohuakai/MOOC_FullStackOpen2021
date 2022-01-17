@@ -37,3 +37,19 @@ h2 {
   color: goldenrod;
   font-style: italic;
 }
+
+.navigation {
+  background: lightgrey;
+  font-size: 20px;
+  padding: 10px;
+}
+
+.linkStyle {
+  padding: 10px;
+}
+
+.logoutButton, .loginUserInfo {  
+  padding: 10px;
+  width: 100px;
+  height: 100px;
+}
