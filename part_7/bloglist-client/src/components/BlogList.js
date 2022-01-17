@@ -1,17 +1,14 @@
 import React from 'react'
-import Blog from './Blog'
 import { useSelector } from 'react-redux'
+import {
+  Link,
+} from 'react-router-dom'
 
-const BlogList = ({ removeBlog, updateBlog }) => {
+const BlogList = () => {
 
   const blogs = useSelector(({ blogs }) => {
     // console.log('inside BlogList----------blogs--', blogs)
     return blogs
-  })
-
-  const user = useSelector(({ user }) => {
-    // console.log('inside BlogList--------user----', user)
-    return user
   })
 
   return(
@@ -22,13 +19,9 @@ const BlogList = ({ removeBlog, updateBlog }) => {
         :[].concat(blogs)
           .sort((a, b) => a.likes > b.likes ? -1 : 1)
           .map(blog =>
-            <Blog
-              key={blog._id}
-              blog={blog}
-              username={user.username}
-              removeBlog={removeBlog}
-              updateBlog={updateBlog}
-            />
+            <div className='blog' key={blog._id}>
+              <Link to={`/blogs/${blog._id}`}> {blog.title} - {blog.author} </Link>
+            </div>
           )
       }
     </div>
