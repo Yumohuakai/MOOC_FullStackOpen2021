@@ -5,7 +5,7 @@ import { addMessage } from './reducers/notificationReducer'
 import Notification from './components/Notification'
 import { initializeBlogs } from './reducers/blogReducer'
 import blogService from './services/blogs'
-import Users from './components/Users'
+import UserList from './components/UserList'
 import User from './components/User'
 import Home from './components/Home'
 import { useField } from './customFormHook'
@@ -124,7 +124,7 @@ const App = () => {
           <User singleUser={singleUser} />
         </Route>
         <Route path="/users">
-          <Users users={users} />
+          <UserList users={users} />
         </Route>
         <Route path="/">
           <Home />

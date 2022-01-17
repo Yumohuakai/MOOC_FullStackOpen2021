@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-const Users = ({ users }) => {
+const UserList = ({ users }) => {
   const padding = {
     padding: 5
   }
@@ -30,4 +30,4 @@ const Users = ({ users }) => {
   )
 }
 
-export default Users
+export default UserList
