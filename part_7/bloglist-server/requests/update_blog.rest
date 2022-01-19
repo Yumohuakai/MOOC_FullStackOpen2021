@@ -1,0 +1,10 @@
+PUT http://localhost:3003/api/blogs/61b8b00007965f45dba59c97
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFrdSIsImlkIjoiNjFjMzhkNjg1OTQ4NmZmMWQyMzY2YjU2IiwiaWF0IjoxNjQwMjA3MzAxfQ.5jx5QLaLh3Gq2rwX8TrEqiF9vT1RFphOIOiwj_g_OmI
+
+{
+    "title": "testing huhu",
+    "author": "Ann Kuu",
+    "url": "testing testing",
+    "likes": 1
+}
