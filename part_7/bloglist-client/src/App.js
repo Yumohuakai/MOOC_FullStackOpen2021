@@ -11,13 +11,10 @@ import Home from './components/Home'
 import Blog from './components/Blog'
 import { useField } from './customFormHook'
 import userService from './services/users'
-import { getDeletedSucceed } from './components/Blog'
-
 import {
   Switch,
   Link,
   Route,
-  Redirect,
   useRouteMatch,
 } from 'react-router-dom'
 
@@ -25,7 +22,7 @@ const App = () => {
   const dispatch = useDispatch()
 
   const loginedUser = useSelector(state => state)
-  // console.log('what is user----', loginedUser)
+  // console.log('what is user----', loginedUser.user)
 
 
   /**********************************keep login user*************************/
@@ -41,25 +38,6 @@ const App = () => {
   }, [])
   /****************************************************************************/
 
-  /***************************blog list****************************************/
-  useEffect(() => {
-    if (loginedUser.user) {
-      dispatch(initializeBlogs())
-      // console.log('--------all blogs', loginedUser.blogs)
-    }
-  }, [loginedUser.user, dispatch])
-
-  const blogMatch = useRouteMatch('/blogs/:id')
-
-  let blog
-  if (blogMatch && loginedUser.blogs) {
-    blog = loginedUser.blogs.find(b => b._id === blogMatch.params.id)
-    // console.log('what is singleUser----blog----', blog)
-  }
-  let isRemoved = getDeletedSucceed()
-  // console.log('is it removed----------', isRemoved)
-  /*****************************************************************************/
-
   /**********************************user list**********************************/
   const [users, setUsers] = useState(null)
   useEffect(() => {
@@ -71,7 +49,7 @@ const App = () => {
         )
     // console.log('--------all users', users)
     }
-  }, [loginedUser.user])
+  }, [loginedUser.blogs])
 
   const userMatch = useRouteMatch('/users/:id')
 
@@ -81,8 +59,24 @@ const App = () => {
   }
   /****************************************************************************/
 
+  /***************************blog list****************************************/
+  useEffect(() => {
+    if (loginedUser.user) {
+      dispatch(initializeBlogs())
+      // console.log('--------all blogs', loginedUser.blogs)
+    }
+  }, [loginedUser.user])
+
+  const blogMatch = useRouteMatch('/blogs/:id')
+
+  let blog
+  if (blogMatch && loginedUser.blogs) {
+    blog = loginedUser.blogs.find(b => b._id === blogMatch.params.id)
+    // console.log('what is single----blog----', blog)
+  }
+  /*****************************************************************************/
+
   /*******************************user login/logout*****************************/
-  // user login/logout part
   const username = useField('text')
   const password = useField('text')
   const removeProp = 'resetValue'
@@ -122,49 +116,44 @@ const App = () => {
         <button type="submit">login</button>
       </form>
     </div>
-
   )
   /****************************************************************************/
 
-  const homepage = () => {
-  //   const padding = {
-  //     padding: 5
-  //   }
-    return (
-      <div>
-        <div className='navigation'>
-          <Link className='linkStyle' to="/">blogs</Link>
-          <Link className='linkStyle' to="/users">users</Link>
-          <span className='loginUserInfo'>
-            {loginedUser.user
-              ? <em>{loginedUser.user.name} logged-in</em>
-              : null
-            }
-          </span>
-          <span className='logoutButton'>
-            <button onClick={handleLogout}> logout </button>
-          </span>
-        </div>
-        <Notification />
-        <h1>Blogs App</h1>
-        <Switch>
-          <Route path="/blogs/:id">
-            <Blog blog={blog} username={loginedUser.user.username} />
-            {isRemoved ? <Redirect to="/" /> : null}
-          </Route>
-          <Route path="/users/:id">
-            <User singleUser={singleUser} />
-          </Route>
-          <Route path="/users">
-            <UserList users={users} />
-          </Route>
-          <Route path="/">
-            <Home />
-          </Route>
-        </Switch>
+  const homepage = () => (
+    <div>
+      <div className='navigation'>
+        <Link className='linkStyle' to="/">blogs</Link>
+        <Link className='linkStyle' to="/users">users</Link>
+        <span className='loginUserInfo'>
+          {loginedUser.user
+            ? <em>{loginedUser.user.name} logged-in</em>
+            : null
+          }
+        </span>
+        <span className='logoutButton'>
+          <button onClick={handleLogout}> logout </button>
+        </span>
       </div>
-    )
-  }
+      <Notification />
+      <h1>Blogs App</h1>
+
+      <Switch>
+        <Route path="/blogs/:id">
+          <Blog blog={blog} username={loginedUser.user.username} />
+        </Route>
+        <Route path="/users/:id">
+          <User singleUser={singleUser} />
+        </Route>
+        <Route path="/users">
+          <UserList users={users} />
+        </Route>
+        <Route path="/">
+          <Home />
+        </Route>
+      </Switch>
+    </div>
+  )
+
   return (
     <div>
       {loginedUser.user

@@ -9,6 +9,7 @@ import {
 } from 'react-router-dom'
 
 ReactDOM.render(
+  // <Router forceRefresh={true}>
   <Router>
     <Provider store={store}>
       <App />

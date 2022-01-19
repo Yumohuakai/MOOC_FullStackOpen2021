@@ -1,6 +1,14 @@
 import React from 'react'
+import  { useField } from '../customFormHook'
 
-const BlogForm = ({ newBlog, resetValueOfNewTitle, restOfNewTitle, resetValueOfNewAuthor, restOfNewAuthor, resetValueOfNewUrl, restOfNewUrl }) => {
+const BlogForm = ({ newBlog }) => {
+  const newTitle = useField('text')
+  const newAuthor = useField('text')
+  const newUrl = useField('text')
+  const removeProp = 'resetValue'
+  const { [removeProp]: resetValueOfNewTitle, ...restOfNewTitle } = newTitle
+  const { [removeProp]: resetValueOfNewAuthor, ...restOfNewAuthor } = newAuthor
+  const { [removeProp]: resetValueOfNewUrl, ...restOfNewUrl } = newUrl
 
   const addBlog = (event) => {
     event.preventDefault()
@@ -17,7 +25,7 @@ const BlogForm = ({ newBlog, resetValueOfNewTitle, restOfNewTitle, resetValueOfN
   return (
     <div>
       <form onSubmit={addBlog}>
-        <h1>Create a new blog</h1>
+        <h2>Create a new blog</h2>
         <div>
             title:  &nbsp;
           <input { ...restOfNewTitle} />

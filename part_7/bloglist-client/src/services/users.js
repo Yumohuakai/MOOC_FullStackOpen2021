@@ -9,12 +9,16 @@ const setToken = newToken => {
   // console.log('--------userservice-------token', token)
 }
 
-const getAll = async () => {
-  // console.log('--------userservice-----getAll-----token', token)
-  const config = {
-    headers: { Authorization: token },
+const getConfig = () => {
+  if (token) {
+    return {
+      headers: { Authorization: token }
+    }
   }
-  const response = await axios.get(baseUrl, config)
+}
+
+const getAll = async () => {
+  const response = await axios.get(baseUrl, getConfig())
   return response.data
 }
 

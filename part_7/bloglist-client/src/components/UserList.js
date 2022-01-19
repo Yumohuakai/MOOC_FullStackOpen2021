@@ -2,10 +2,6 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 const UserList = ({ users }) => {
-  const padding = {
-    padding: 5
-  }
-
   return (
     <div>
       <h2>USER LIST</h2>
@@ -19,7 +15,7 @@ const UserList = ({ users }) => {
             users
               ? users.map(u =>
                 <tr key={u.id}>
-                  <td> <Link style={padding} to={`/users/${u.id}`}>{u.name}</Link> </td>
+                  <td> <Link className='linkStyle' to={`/users/${u.id}`}>{u.name}</Link> </td>
                   <td> {u.blogs.length} </td>
                 </tr>)
               : null

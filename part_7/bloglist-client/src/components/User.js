@@ -1,7 +1,7 @@
 import React from 'react'
 
 const User = ({ singleUser }) => {
-  console.log('what is singleUser----User----', singleUser)
+  // console.log('what is singleUser----User----', singleUser)
   return (
     <div>
       <h2>
