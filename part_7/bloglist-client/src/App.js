@@ -85,57 +85,76 @@ const App = () => {
 
   const handleLogin = async (event) => {
     event.preventDefault()
-    try {
-      dispatch(loginUser(username.value, password.value ))
-      resetValueOfUsername()
-      resetValueOfPassword()
-      dispatch(addMessage('Login succeed', 5))
-    } catch (exception) {
-      dispatch(addMessage('Wrong username or password', 5))
-    }
+    dispatch(loginUser(username.value, password.value ))
+    resetValueOfUsername()
+    resetValueOfPassword()
+    dispatch(addMessage('Login succeed', 'success', 5))
   }
 
   const handleLogout = () => {
     dispatch(logoutUser())
-    dispatch(addMessage('Logout succeed', 5))
+    dispatch(addMessage('Logout succeed', 'success', 5))
   }
 
   const loginForm = () => (
     <div>
       <Notification />
-      <h1>Login</h1>
-      <form onSubmit={handleLogin}>
-        <div>
-        username
-          <input { ...restOfUsername} />
+
+      <div className="digit_login">
+        <div className="dt_login_header">
+          <h1>BLOG APP</h1>
         </div>
-        <div>
-        password
-          <input { ...restOfPassword} />
+        <div className="dt_login_form">
+          <form onSubmit={handleLogin}>
+            <div className="login_form_body">
+              <div className="form_input">
+                <input autoFocus required placeholder="username" { ...restOfUsername} />
+              </div>
+              <div className="form_input">
+                <input required placeholder="password" { ...restOfPassword} />
+              </div>
+              <div className="login_form_submit">
+                <input  type="submit" value="Login"/>
+              </div>
+            </div>
+          </form>
         </div>
-        <button type="submit">login</button>
-      </form>
+      </div>
+
     </div>
   )
   /****************************************************************************/
 
   const homepage = () => (
     <div>
-      <div className='navigation'>
-        <Link className='linkStyle' to="/">blogs</Link>
-        <Link className='linkStyle' to="/users">users</Link>
-        <span className='loginUserInfo'>
-          {loginedUser.user
-            ? <em>{loginedUser.user.name} logged-in</em>
-            : null
-          }
-        </span>
-        <span className='logoutButton'>
-          <button onClick={handleLogout}> logout </button>
-        </span>
+      <div className='nav'>
+        <div  className='nav_left'>
+          <div>
+            <Link to="/">BLOGS</Link>
+          </div>
+          <div>
+            <Link to="/users">USERS</Link>
+          </div>
+        </div>
+
+        <div  className='nav_right'>
+          <div >
+            <button onClick={handleLogout}> Logout </button>
+          </div>
+          <div >
+            {loginedUser.user
+              ? <em>{loginedUser.user.name}</em>
+              : null
+            }
+          </div>
+          <div className="clear"></div>
+        </div>
       </div>
-      <Notification />
-      <h1>Blogs App</h1>
+      <div className='layer_1' >
+        <Notification />
+        <h1>Blogs App</h1>
+      </div>
+
 
       <Switch>
         <Route path="/blogs/:id">

@@ -3,7 +3,7 @@ let timeoutID
 const notificationReducer = (state = null, action) => {
   switch (action.type) {
   case 'ADD_MESSAGE':
-    return state = action.data.message
+    return action.data
   case 'REMOVE_MESSAGE':
     return state = null
   default:
@@ -11,11 +11,15 @@ const notificationReducer = (state = null, action) => {
   }
 }
 
-export const addMessage = (message, timeInSeconds) => {
+export const addMessage = (message, styleType, timeInSeconds) => {
   return dispatch => {
+    // console.log('----notificationReducer----styleType', styleType)
     dispatch({
       type: 'ADD_MESSAGE',
-      data: { message }
+      data: {
+        message: message,
+        styleType: styleType,
+      }
     })
 
     if (timeoutID) {

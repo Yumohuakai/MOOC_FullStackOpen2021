@@ -16,7 +16,7 @@ const Blog = ({ blog, username }) => {
 
   const addComment = (blogObject) => {
     dispatch(commentBlog(blogObject))
-    dispatch(addMessage(`The comment for Blog ${blogObject.title} by ${blogObject.author} is added`, 5))
+    dispatch(addMessage(`The comment for Blog ${blogObject.title} by ${blogObject.author} is added`, 'success', 5))
     resetValue()
   }
 
@@ -42,7 +42,7 @@ const Blog = ({ blog, username }) => {
   /*****************************increase like-point*****************************/
   const updateBlog = (blogObject) => {
     dispatch(likeBlog(blogObject))
-    dispatch(addMessage(`Blog ${blogObject.title} by ${blogObject.author} is updated`, 5))
+    dispatch(addMessage(`Blog ${blogObject.title} by ${blogObject.author} is updated`, 'success', 5))
   }
 
   const addLikePoints = () => {
@@ -69,11 +69,11 @@ const Blog = ({ blog, username }) => {
     if (ok) {
       try {
         dispatch(deleteBlog(blogObject._id))
-        dispatch(addMessage(`Blog ${blogObject.title} by ${blogObject.author} is removed`, 5))
+        dispatch(addMessage(`Blog ${blogObject.title} by ${blogObject.author} is removed`, 'success', 5))
         history.push('/')
       } catch (exception) {
         console.log('what is the exception happened when remove a blog', exception)
-        dispatch(addMessage('something wrong', 5))
+        dispatch(addMessage('something wrong', 'error', 5))
       }
     }
   }

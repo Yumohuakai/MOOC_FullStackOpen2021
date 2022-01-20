@@ -1,5 +1,6 @@
 import loginService from '../services/login'
 import blogService from '../services/blogs'
+import { addMessage } from './notificationReducer'
 
 const userReducer = (state = null, action) => {
   switch (action.type) {
@@ -16,13 +17,17 @@ const userReducer = (state = null, action) => {
 
 export const loginUser = (username, password) => {
   return async dispatch => {
-    const user = await loginService.login({ username, password, })
-    window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
-    blogService.setToken(user.token)
-    dispatch({
-      type: 'LOGIN',
-      data: user
-    })
+    try {
+      const user = await loginService.login({ username, password, })
+      window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
+      blogService.setToken(user.token)
+      dispatch({
+        type: 'LOGIN',
+        data: user
+      })
+    } catch (exception) {
+      dispatch(addMessage('Wrong username or password', 'error', 5))
+    }
   }
 }
 

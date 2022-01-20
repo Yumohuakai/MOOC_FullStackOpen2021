@@ -17,7 +17,7 @@ const Home = () => {
   const addBlog = (blogObject) => {
     blogFormRef.current.toggleVisibility()
     dispatch(createBlog(blogObject, user))
-    dispatch(addMessage(`A new blog ${blogObject.title} by ${blogObject.author} is added`, 5))
+    dispatch(addMessage(`A new blog ${blogObject.title} by ${blogObject.author} is added`, 'success', 5))
   }
 
   const blogFormRef = useRef()
