@@ -23,25 +23,29 @@ const BlogForm = ({ newBlog }) => {
   }
 
   return (
-    <div>
-      <form onSubmit={addBlog}>
+    <div className="create_blog">
+      <div className="create_blog_header">
         <h2>Create a new blog</h2>
-        <div>
-            title:  &nbsp;
-          <input { ...restOfNewTitle} />
-        </div>
-        <div>
-            author:  &nbsp;
-          <input { ...restOfNewAuthor} />
-        </div>
-        <div>
-            url:  &nbsp;
-          <input { ...restOfNewUrl} />
-        </div>
-        <button id="create-button" type="submit">create</button>
-      </form>
+      </div>
+      <div className='blog_form'>
+        <form onSubmit={addBlog}>
+          <div className='blog_form_body'>
+            <div className="blog_form_input">
+              <input autoFocus required placeholder="title" { ...restOfNewTitle} />
+            </div>
+            <div className="blog_form_input">
+              <input required placeholder="author" { ...restOfNewAuthor} />
+            </div>
+            <div className="blog_form_input">
+              <input required placeholder="url" { ...restOfNewUrl} />
+            </div>
+            <div className="blog_form_submit">
+              <input  id="create-button" type="submit" value="Create"/>
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
-
   )
 }
 

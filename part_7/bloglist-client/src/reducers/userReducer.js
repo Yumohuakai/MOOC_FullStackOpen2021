@@ -21,6 +21,7 @@ export const loginUser = (username, password) => {
       const user = await loginService.login({ username, password, })
       window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
       blogService.setToken(user.token)
+      dispatch(addMessage('Login succeed', 'success', 5))
       dispatch({
         type: 'LOGIN',
         data: user
@@ -34,6 +35,7 @@ export const loginUser = (username, password) => {
 export const logoutUser = () => {
   return dispatch => {
     window.localStorage.removeItem('loggedBlogappUser')
+    dispatch(addMessage('Logout succeed', 'success', 5))
     dispatch({
       type: 'LOGOUT'
     })

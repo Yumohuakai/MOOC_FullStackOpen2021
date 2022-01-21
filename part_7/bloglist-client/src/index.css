@@ -1,6 +1,7 @@
+/* Notification message styles setting starts */
 .error {
-  color: #242936;
-  background: orangered;
+  color: orangered;
+  background: #242936;
   font-size: 20px;  
   font-weight: bold;
   border-style: solid;
@@ -9,30 +10,14 @@
   margin-bottom: 10px;
 }
 .success {
-  color: #242936;
-  background: olivedrab;
+  color: olivedrab;
+  background: #242936;
   font-size: 20px;
   font-weight: bold;
   border-style: solid;
   border-radius: 5px;
   padding: 10px;
   margin-bottom: 10px;
-}
-
-.blog {
-  color: grey;
-  padding-top: 3px;
-  font-size: 15px;
-  border-color: black;
-  border-style: solid;
-  border-radius: 5px;
-  padding: 10px;
-  margin-bottom: 10px;
-}
-.navigation {
-  background: lightgrey;
-  font-size: 20px;
-  padding: 10px;
 }
 
 .linkStyle {
@@ -66,11 +51,11 @@ body {
 /* Navigation bar setting starts */
 .nav {
   width: 100%;
-  height: 50px;
+  height: 100px;
   
   background-color: #191e2a;
   box-shadow: 0px 3px 10px #010101;
-  color:#f89b1c;
+  color:olivedrab;
 
   /* to set navigation-bar as the fixed bar, so when the screen is scroolled down, it is always staying on the top. */
   position: fixed;
@@ -81,95 +66,113 @@ body {
 }
 
 .nav_left {
-  width: 30%;
-  height: 50px;
+  width: 60%;
+  height: 100px;
   line-height: 50px;
   float: left;
   /* border: 5px solid blue; */
-  min-width: 300px;
-  padding-left: 1%;    
+  min-width: 450px;  
+  padding: 30px 0px;
+  /* padding-left: 1%;     */
 }
 
 .nav_left div {
   height: 50px;
-  margin: 0 15px;
+  margin: 0 5px;
   float: left;
   /* border: 5px solid orange; */
 }
 
-.nav_left div a {   
+.nav_left div h1 {
   height: 50px;
-  color: olivedrab;
-  text-decoration: none;
-  font-size: 20px;
-  font-weight: bold;
-  
-  /* border-radius: 50%;   */
+  margin: 0 30px 0 5px;
+  float: left;
   /* border: 5px solid green; */
 }
 
-.nav_left div a:hover {
-  background-color: #1f2430;
+.nav_left_link {
+  height: 25px;
+  font-size: 15px;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+  /* border: 1px solid white; */
+}
+
+.nav_left_link a{
+  text-decoration: none;
+  font-size: 20px;
+  font-weight: bold;
+  color: #010101;
+  background: olivedrab;
+  padding-top: 3px;
+  font-size: 15px;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 0 15px 0 0;
+}
+
+.nav_left_link a:hover {
   transform: translate(0,-5px);
   box-shadow: 0px 15px 30px #010101;
-  color: #f89b1c;
   cursor: pointer;
 }
 
-/* .nav_left div:nth-child(2) {
-  padding-top: 25px;
-  width: 50px;
-  text-align: center;  
-} */
-
 .nav_right {
-  width: 65%;
-  height: 50px;
-  line-height: 50px;
-  text-transform: uppercase;   
+  width: 39%;
+  height: 100px;
+  line-height: 50px;  
   float: left;
-  /* border: 5px solid red; */
-  min-width: 350px;
+  /* border: 1px solid red; */
+  min-width: 250px;
+  padding: 30px 0px;
 }
 
 .nav_right div {
-  margin: 0 15px;
   height: 50px;
   float: right;
   /* border: 5px solid orange; */
 }
 
-.nav_right div button {
-  background-color: transparent;
-  color: olivedrab;
+.nav_right_user {
+  margin: 0 15px;
+  height: 50px;
+  font-weight: bold;
+  text-transform: uppercase; 
+  float: right;
+  /* border: 5px solid orange; */
+}
+
+.nav_right_btn  {
+  margin: 0 5px;
+  height: 50px;
+  float: right;
+  /* border: 1px solid orange; */
+}
+
+.nav_right_btn button {
   font-size: 15px;
 
   background: olivedrab;
-  color: #242936;
+  color: #010101;
   font-weight: bold;
 }
 
-.nav_right div button:hover {
-  background: #f89b1c;
-  color: #1f2430;
+.nav_right_btn button:hover {
   transform: translate(0,-5px);
   box-shadow: 0px 15px 30px #010101;
   cursor: pointer;
 }
 
 button {
-  /* background: #79aec8; */
-  
-  /* background-color: transparent; */
-  background: #f89b1c;
-  padding: 10px 15px;
+  background: olivedrab;
+  padding: 10px 10px;
   border: none;
   border-radius: 4px;
-  color: #fff;
+  color: #010101;
   cursor: pointer;
 
   margin: 2px 0;
-  /* padding: 2px 3px; */
   vertical-align: middle;
   font-family: "Roboto", "Lucida Grande", Verdana, Arial, sans-serif;
   font-weight: normal;
@@ -177,7 +180,7 @@ button {
 }
 
 /* Login setting starts */
-.digit_login {
+.login, .create_blog {
   position:fixed;
   top: 50%;
   left: 50%;
@@ -192,7 +195,7 @@ button {
   box-shadow: 0px 3px 10px #010101;
 }
 
-.dt_login_header {
+.login_header, .create_blog_header {
   margin: 0 0;
   padding: 20px 20px;
   width: auto;
@@ -203,11 +206,12 @@ button {
 
   background: olivedrab;
   color: #242936;
+  text-transform: uppercase;
 }
 
 
 /* Login Form setting starts*/
-.dt_login_form {
+.login_form, .blog_form {
   width: 100%;
   position: relative;
 }
@@ -221,18 +225,18 @@ button {
   /* border: 5px solid white; */
 }
 
-.form_input input {  
+.form_input input, .blog_form_input input {  
   margin: 10px 5px;
   padding: 5px 15px;
   width: 200px;
   height: 40px;
   font-size: 20px;  
   font-weight: bold;
+  border-radius: 4px;
   /* border: 2px solid orange; */
 }
 
-
-.login_form_submit input {
+.login_form_submit input, .blog_form_submit input {
   width: 90px;
   height: 40px;
   margin-left: 230px;
@@ -241,6 +245,19 @@ button {
   color: #242936;
   font-size: 20px;  
   font-weight: bold;
+
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+
+  vertical-align: middle;
+  font-family: "Roboto", "Lucida Grande", Verdana, Arial, sans-serif;
+}
+
+.login_form_submit input:hover, .blog_form_submit input:hover {
+  transform: translate(0,-5px);
+  box-shadow: 0px 15px 30px #010101;
+  cursor: pointer;
 }
 
 .clear {
@@ -248,13 +265,14 @@ button {
 }
 
 
-/* Main body part setting starts */
+/* Main body part setting starts (App.js)*/
 
-.layer_1 {
+.body_layer_1 {
   /* width: 100%; */
-  /* the margin-top value is the height of navigator-bar: 50px + its box-shadow size: 3px + 10px = 116px, then add 5px more for it. */
-  margin: 68px auto 0 auto; 
-  background-color: #191e2a; 
+  /* the margin-top value is the height of navigator-bar: 100px + its box-shadow size: 3px + 10px = 113px, then add 7px more for it. */
+  margin: 120px auto 0 auto; 
+  /* background-color: #191e2a;  */  
+  background-color: #1f2430;
   
   padding-top: 20px;
   overflow: hidden;
@@ -263,4 +281,91 @@ button {
   border-radius: 4px;
 
   color: #afafaf;
+}
+
+/* Main body part setting starts (BlogList.js) */
+
+.bloglist h2, .blog_form h2 {
+  color: olivedrab;
+  /* border: 5px solid white; */
+}
+
+.blog {
+  height: 25px;
+  font-size: 15px;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+  /* border: 1px solid white; */
+}
+
+.blog a{
+  text-decoration: none;
+  font-weight: bold;
+  color: #010101;
+  background: olivedrab;
+  padding-top: 3px;
+  font-size: 15px;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.blog a:hover {
+  transform: translate(0,-5px);
+  box-shadow: 0px 15px 30px #010101;
+  cursor: pointer;
+}
+
+/* Main body part setting starts (Togglable.js) */
+
+.switch_btn {
+  margin: 0 5px;
+  height: 50px;
+  /* float: right; */
+  /* border: 1px solid orange; */
+}
+
+.switch_btn button {
+  color: olivedrab;
+  font-size: 15px;
+
+  background: olivedrab;
+  color: #010101;
+  font-weight: bold;
+}
+.switch_btn button:hover {
+  transform: translate(0,-5px);
+  box-shadow: 0px 15px 30px #010101;
+  cursor: pointer;
+}
+
+/* Main body part setting starts (BlogForm.js) */
+
+.create_blog {
+  width: 500px;
+  height: 450px;
+}
+
+.blog_form_body {
+  width: 400px;
+  height: 300px;
+  position: absolute;
+  left: 50px;
+  top:30px;
+  /* border: 1px solid white; */
+}
+
+.blog_form_input input {  
+  margin: 10px 5px;
+  padding: 5px 15px;
+  width: 350px;
+  height: 40px;
+  font-size: 20px;  
+  font-weight: bold;
+  /* border: 2px solid orange; */
+}
+
+.blog_form_submit input {
+  margin-left: 300px;
 }

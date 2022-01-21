@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { loginUser, logoutUser, getUserFromLocalStorage } from './reducers/userReducer'
-import { addMessage } from './reducers/notificationReducer'
+// import { addMessage } from './reducers/notificationReducer'
 import Notification from './components/Notification'
 import { initializeBlogs } from './reducers/blogReducer'
 import blogService from './services/blogs'
@@ -88,23 +88,21 @@ const App = () => {
     dispatch(loginUser(username.value, password.value ))
     resetValueOfUsername()
     resetValueOfPassword()
-    dispatch(addMessage('Login succeed', 'success', 5))
   }
 
   const handleLogout = () => {
     dispatch(logoutUser())
-    dispatch(addMessage('Logout succeed', 'success', 5))
   }
 
   const loginForm = () => (
     <div>
       <Notification />
 
-      <div className="digit_login">
-        <div className="dt_login_header">
+      <div className="login">
+        <div className="login_header">
           <h1>BLOG APP</h1>
         </div>
-        <div className="dt_login_form">
+        <div className="login_form">
           <form onSubmit={handleLogin}>
             <div className="login_form_body">
               <div className="form_input">
@@ -129,19 +127,22 @@ const App = () => {
     <div>
       <div className='nav'>
         <div  className='nav_left'>
-          <div>
+          <div className='nav_left_app_name'>
+            <h1>Blogs App</h1>
+          </div>
+          <div className='nav_left_link'>
             <Link to="/">BLOGS</Link>
           </div>
-          <div>
+          <div className='nav_left_link'>
             <Link to="/users">USERS</Link>
           </div>
         </div>
 
         <div  className='nav_right'>
-          <div >
+          <div className='nav_right_btn'>
             <button onClick={handleLogout}> Logout </button>
           </div>
-          <div >
+          <div className='nav_right_user'>
             {loginedUser.user
               ? <em>{loginedUser.user.name}</em>
               : null
@@ -150,9 +151,8 @@ const App = () => {
           <div className="clear"></div>
         </div>
       </div>
-      <div className='layer_1' >
+      <div className='body_layer_1' >
         <Notification />
-        <h1>Blogs App</h1>
       </div>
 
 
