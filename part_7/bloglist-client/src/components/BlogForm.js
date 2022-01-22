@@ -1,7 +1,16 @@
 import React from 'react'
 import  { useField } from '../customFormHook'
+import {
+  FormButton,
+  FormButtonSecond,
+  InputBlog,
+  BlogFormDiv,
+  BlogFormOuterDiv,
+  FormHeadDiv,
+  FormDiv
+} from './StyledComponents'
 
-const BlogForm = ({ newBlog }) => {
+const BlogForm = ({ newBlog, showForm, setShowForm }) => {
   const newTitle = useField('text')
   const newAuthor = useField('text')
   const newUrl = useField('text')
@@ -22,29 +31,40 @@ const BlogForm = ({ newBlog }) => {
     resetValueOfNewUrl()
   }
 
-  return (
-    <div className="create_blog">
-      <div className="create_blog_header">
+  // const [showForm, setShowForm] = useState(false)
+  const hideForm = () => setShowForm(false)
+
+  const blogform  = () => (
+    <BlogFormOuterDiv>
+      <FormHeadDiv>
         <h2>Create a new blog</h2>
-      </div>
-      <div className='blog_form'>
+      </FormHeadDiv>
+
+      <FormDiv>
         <form onSubmit={addBlog}>
-          <div className='blog_form_body'>
-            <div className="blog_form_input">
-              <input autoFocus required placeholder="title" { ...restOfNewTitle} />
+          <BlogFormDiv>
+            <div>
+              <InputBlog autoFocus required placeholder="title" { ...restOfNewTitle} />
             </div>
-            <div className="blog_form_input">
-              <input required placeholder="author" { ...restOfNewAuthor} />
+            <div>
+              <InputBlog required placeholder="author" { ...restOfNewAuthor} />
             </div>
-            <div className="blog_form_input">
-              <input required placeholder="url" { ...restOfNewUrl} />
+            <div>
+              <InputBlog required placeholder="url" { ...restOfNewUrl} />
             </div>
-            <div className="blog_form_submit">
-              <input  id="create-button" type="submit" value="Create"/>
+            <div>
+              <FormButton  id="create-button" type="submit"> Create </FormButton>
+              <FormButtonSecond onClick={hideForm}>Cancel</FormButtonSecond>
             </div>
-          </div>
+          </BlogFormDiv>
         </form>
-      </div>
+      </FormDiv>
+    </BlogFormOuterDiv>
+  )
+
+  return (
+    <div>
+      { showForm ? blogform() : null }
     </div>
   )
 }

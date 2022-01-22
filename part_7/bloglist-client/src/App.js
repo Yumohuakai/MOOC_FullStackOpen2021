@@ -9,6 +9,26 @@ import UserList from './components/UserList'
 import User from './components/User'
 import Home from './components/Home'
 import Blog from './components/Blog'
+import {
+  Button,
+  FormButton,
+  NavigationHead,
+  NavDivLink,
+  FormHeadDiv,
+  InputLogin,
+  LoginFormOuterDiv,
+  LoginFormInnerDiv,
+  FormDiv,
+  NavigationRightBtnDiv,
+  NavigationRightUserDiv,
+  NavigationRightDiv,
+  NavigationLeftDiv,
+  NavAppDiv,
+  NavDiv,
+  BodyFirstDiv,
+  ClearBothDiv
+} from './components/StyledComponents'
+
 import { useField } from './customFormHook'
 import userService from './services/users'
 import {
@@ -17,6 +37,7 @@ import {
   Route,
   useRouteMatch,
 } from 'react-router-dom'
+
 
 const App = () => {
   const dispatch = useDispatch()
@@ -98,26 +119,26 @@ const App = () => {
     <div>
       <Notification />
 
-      <div className="login">
-        <div className="login_header">
+      <LoginFormOuterDiv>
+        <FormHeadDiv>
           <h1>BLOG APP</h1>
-        </div>
-        <div className="login_form">
+        </FormHeadDiv>
+        <FormDiv>
           <form onSubmit={handleLogin}>
-            <div className="login_form_body">
-              <div className="form_input">
-                <input autoFocus required placeholder="username" { ...restOfUsername} />
+            <LoginFormInnerDiv>
+              <div>
+                <InputLogin autoFocus required placeholder="username" { ...restOfUsername} />
               </div>
-              <div className="form_input">
-                <input required placeholder="password" { ...restOfPassword} />
+              <div>
+                <InputLogin required placeholder="password" { ...restOfPassword} />
               </div>
               <div className="login_form_submit">
-                <input  type="submit" value="Login"/>
+                <FormButton  type="submit"> Login </FormButton>
               </div>
-            </div>
+            </LoginFormInnerDiv>
           </form>
-        </div>
-      </div>
+        </FormDiv>
+      </LoginFormOuterDiv>
 
     </div>
   )
@@ -125,35 +146,36 @@ const App = () => {
 
   const homepage = () => (
     <div>
-      <div className='nav'>
-        <div  className='nav_left'>
-          <div className='nav_left_app_name'>
-            <h1>Blogs App</h1>
-          </div>
-          <div className='nav_left_link'>
-            <Link to="/">BLOGS</Link>
-          </div>
-          <div className='nav_left_link'>
-            <Link to="/users">USERS</Link>
-          </div>
-        </div>
+      <NavDiv>
+        <NavigationLeftDiv>
+          <NavAppDiv>
+            <NavigationHead>Blogs App</NavigationHead>
+          </NavAppDiv>
+          <NavDivLink>
+            <Link to="/"  className='link' >BLOGS</Link>
+          </NavDivLink>
+          <NavDivLink>
+            <Link to="/users"  className='link' >USERS</Link>
+          </NavDivLink>
+        </NavigationLeftDiv>
 
-        <div  className='nav_right'>
-          <div className='nav_right_btn'>
-            <button onClick={handleLogout}> Logout </button>
-          </div>
-          <div className='nav_right_user'>
+        <NavigationRightDiv>
+          <NavigationRightBtnDiv>
+            <Button onClick={handleLogout}> Logout </Button>
+          </NavigationRightBtnDiv>
+          <NavigationRightUserDiv>
             {loginedUser.user
               ? <em>{loginedUser.user.name}</em>
               : null
             }
-          </div>
-          <div className="clear"></div>
-        </div>
-      </div>
-      <div className='body_layer_1' >
+          </NavigationRightUserDiv>
+        </NavigationRightDiv>
+      </NavDiv>
+
+      <ClearBothDiv></ClearBothDiv>
+      <BodyFirstDiv>
         <Notification />
-      </div>
+      </BodyFirstDiv>
 
 
       <Switch>

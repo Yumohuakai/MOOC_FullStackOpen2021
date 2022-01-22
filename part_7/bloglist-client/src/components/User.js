@@ -1,9 +1,13 @@
 import React from 'react'
+import {
+  Link,
+} from 'react-router-dom'
+import { GreenDiv, UserBlogList } from './StyledComponents'
 
 const User = ({ singleUser }) => {
   // console.log('what is singleUser----User----', singleUser)
   return (
-    <div>
+    <GreenDiv>
       <h2>
         {singleUser
           ?  singleUser.name
@@ -13,13 +17,13 @@ const User = ({ singleUser }) => {
       <ul>
         {singleUser
           ?  singleUser.blogs.map(b =>
-            <li key={b._id}>
-              {b.title}
-            </li>
+            <UserBlogList key={b._id}>
+              <Link to={`/blogs/${b._id}`} className='link' > {b.title} </Link>
+            </UserBlogList>
           )
           : null}
       </ul>
-    </div>
+    </GreenDiv>
   )
 }
 export default User

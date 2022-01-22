@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 import {
   Link,
 } from 'react-router-dom'
+import { BlogListDiv, HeadTwo } from './StyledComponents'
 
 const BlogList = () => {
 
@@ -12,16 +13,16 @@ const BlogList = () => {
   })
 
   return(
-    <div className='bloglist'>
-      <h2>BLOG LIST</h2>
+    <div>
+      <HeadTwo>BLOG LIST</HeadTwo>
       {blogs === null
         ? <p>no data</p>
         :[].concat(blogs)
           .sort((a, b) => a.likes > b.likes ? -1 : 1)
           .map(blog =>
-            <div className='blog' key={blog._id}>
-              <Link to={`/blogs/${blog._id}`}> {blog.title} - {blog.author} </Link>
-            </div>
+            <BlogListDiv key={blog._id}>
+              <Link to={`/blogs/${blog._id}`} className='link' > {blog.title} - {blog.author} </Link>
+            </BlogListDiv>
           )
       }
     </div>

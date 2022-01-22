@@ -7,6 +7,15 @@ import {
   useHistory,
 } from 'react-router-dom'
 
+import {
+  FormButtonSecond,
+  SingleBlogButton,
+  BlogDivLink,
+  InputComment,
+  SingleBlogComment,
+  GreenDiv
+} from './StyledComponents'
+
 const Blog = ({ blog, username }) => {
   const dispatch = useDispatch()
   const history = useHistory()
@@ -83,41 +92,47 @@ const Blog = ({ blog, username }) => {
     Math.floor(Math.random() * 100000000)
 
   if ( !blog ) {
-    return (<div> no data </div>)
+    return (<div  className='single_blog'> no data </div>)
   }
   return (
     <div>
-      <h2> {blog.title} - {blog.author} </h2>
-
-      <a href={blog.url} >{blog.url}</a>
-
-      <p>
-        likes: {blog.likes} &nbsp;
-        <button id={blog._id} onClick={addLikePoints} >like</button>
-      </p>
-
-      <p>
-        added by {blog.user
-          ? blog.user.name
-          : ''
-        }
-      </p>
-
-      <div>
-        {blog.user
-          ? blog.user.username === username
-            ? <p><button onClick={() => removeBlog(blog)}>remove this blog</button></p>
-            : ''
-          :''
-        }
-      </div>
-
-      <div>
-        <h3> comments</h3>
+      <GreenDiv>
         <div>
+          <h2> {blog.title} - {blog.author} </h2>
+        </div>
+        <div>
+          <BlogDivLink href={blog.url} >{blog.url}</BlogDivLink>
+        </div>
+        <div>
+          <p>
+            likes: {blog.likes} &nbsp;
+            <SingleBlogButton id={blog._id} onClick={addLikePoints} >like</SingleBlogButton>
+          </p>
+        </div>
+        <div>
+          <p>
+            added by {blog.user
+              ? blog.user.name
+              : ''
+            }
+          </p>
+        </div>
+        <div>
+          {blog.user
+            ? blog.user.username === username
+              ? <p><SingleBlogButton onClick={() => removeBlog(blog)}>remove this blog</SingleBlogButton></p>
+              : ''
+            :''
+          }
+        </div>
+      </GreenDiv>
+
+      <SingleBlogComment>
+        <h3> COMMENTS</h3>
+        <div className='single_blog_comment_form'>
           <form onSubmit={handleAddComment}>
-            <input { ...restOfNewComment} /> &nbsp;
-            <button type="submit">add comment</button>
+            <InputComment autoFocus required placeholder="you can add comment here" { ...restOfNewComment} />
+            <FormButtonSecond type="submit">Add Comment</FormButtonSecond>
           </form>
         </div>
 
@@ -130,7 +145,7 @@ const Blog = ({ blog, username }) => {
             )
             : null}
         </ul>
-      </div>
+      </SingleBlogComment>
     </div>
   )
 }
