@@ -1,8 +1,8 @@
   
 import React from 'react'
 
-const Authors = ({authors}) => {
-  if (!authors) {
+const Authors = ({authors, show}) => {
+  if (!show) {
     return null
   }
   
