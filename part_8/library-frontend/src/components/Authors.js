@@ -2,16 +2,20 @@
 import React from 'react'
 import { useQuery } from '@apollo/client'
 import { ALL_AUTHORS } from '../queries'
+import BirthYearForm from './BirthYearForm'
 
-const Authors = ({ show}) => {
-  
-  const result = useQuery(ALL_AUTHORS)
+const Authors = ({ show }) => {
+  const options = []
+  const result = useQuery(ALL_AUTHORS)  
 
   if (!show) {
     return null
   } else  if (result.loading) {
     return <div>loading...</div>
-  } 
+  } else if (result.data.allAuthors) {
+    result.data.allAuthors.map(a =>  options.push({ value: a.name,  label: a.name}))
+    // console.log('Author.js ----------options-----', options)
+  }
   
   return (
     <div>
@@ -36,7 +40,9 @@ const Authors = ({ show}) => {
           )}
         </tbody>
       </table>
-
+      <div>
+        <BirthYearForm options={options}/>
+      </div>
     </div>
   )
 }
