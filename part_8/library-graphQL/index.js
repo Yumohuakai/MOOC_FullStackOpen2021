@@ -65,10 +65,15 @@ const resolvers = {
     allBooks: async (root, args) => {
       if (args.author && args.genre) {
         return books.filter(book => book.author === args.author && book.genres.includes(args.genre))
-      } else if (args.author) {
-        return books.filter(book => book.author === args.author)
+      } else if (args.author) {        
+        const author = await Author.findOne({ name: args.author })
+        if (author) {
+          return await Book.find({'author': author.id})
+        } else {
+          return null
+        }        
       } else if (args.genre) {
-        return books.filter(book => book.genres.includes(args.genre))
+        return await Book.find({'genres': { $in: [ args.genre ] }})
       } 
       return await Book.find({}).populate('author')
     }, 
@@ -88,13 +93,28 @@ const resolvers = {
       if (!existedAuthor) {     
         const author = new Author({ name: args.authorName,  
           born: args.authorBorn })           
-        await author.save()
+        // await author.save()
+
+        try {
+          await author.save()
+        } catch (error) {
+          throw new UserInputError(error.message, {
+            invalidArgs: args,
+          })
+        }
+
         book = new Book({ ...args, author })
       } else {
         book = new Book({ ...args, author: existedAuthor })
       }
       
-      await book.save()
+      try {
+          await book.save()
+        } catch (error) {
+          throw new UserInputError(error.message, {
+            invalidArgs: args,
+          })
+        }
       
 
       // const currentUser = context.currentUser
@@ -106,8 +126,8 @@ const resolvers = {
       // try {
       //   await book.save()
       //   await author.save()
-        // currentUser.friends = currentUser.friends.concat(person)
-        // await currentUser.save()
+      //   currentUser.friends = currentUser.friends.concat(person)
+      //   await currentUser.save()
       // } catch (error) {
       //   throw new UserInputError(error.message, {
       //     invalidArgs: args,
