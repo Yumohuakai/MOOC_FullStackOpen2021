@@ -12,7 +12,7 @@ const LoginForm = ({ show, setToken,  setPage }) => {
     if ( result.data ) {
       const token = result.data.login.value
       setToken(token)
-      console.log('-----LoginForm---------token--------', token)
+      // console.log('-----LoginForm---------token--------', token)
       localStorage.setItem('libraryapp-user-token', token)
     }
   }, [result.data]) // eslint-disable-line
@@ -34,7 +34,7 @@ const LoginForm = ({ show, setToken,  setPage }) => {
       <h2>Login</h2>
       <form onSubmit={submit}>
         <div>
-          username <input
+          username <input autoFocus
             value={username}
             onChange={({ target }) => setUsername(target.value)}
           />

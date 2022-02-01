@@ -16,7 +16,7 @@ const Authors = ({ show, token }) => {
     result.data.allAuthors.map(a =>  options.push({ value: a.name,  label: a.name}))
     // console.log('Author.js ----------options-----', options)
   }
-  console.log('-----Authors---------token--------', token)
+  // console.log('-----Authors---------token--------', token)
 
   if (!token) {
     return (

@@ -16,7 +16,7 @@ const App = () => {
     localStorage.clear()
     client.resetStore()
   }  
-  console.log('-----App---------token--------', token)
+  // console.log('-----App---------token--------', token)
   if (!token) {
     return (
       <div>
