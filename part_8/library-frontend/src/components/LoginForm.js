@@ -22,7 +22,7 @@ const LoginForm = ({ show, setToken,  setPage }) => {
 
     login({ variables: { username, password } })
     
-    setPage('books')
+    setPage('recommend')
   }
 
   if (!show) {
