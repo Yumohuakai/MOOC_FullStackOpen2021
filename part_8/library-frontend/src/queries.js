@@ -1,26 +1,42 @@
 import { gql  } from '@apollo/client'
 
-export const ALL_AUTHORS = gql`
-    query {
-        allAuthors {
-            name
-            born
-            bookCount
-        }
+const BOOK_DETAILS = gql`
+  fragment BookDetails on Book {
+    id
+    title
+    published
+    genres 
+    author {
+      name
+      born
     }
+  }
+`
+
+const AUTHOR_DETAILS = gql`
+  fragment AuthorDetails on Author {
+    name
+    born
+    bookCount
+  }
+`
+
+export const ALL_AUTHORS = gql`
+  query {
+      allAuthors {
+        ...AuthorDetails
+      }
+  }
+  ${AUTHOR_DETAILS}
 `
 
 export const ALL_BOOKS = gql`
-    query {
-        allBooks {
-            title
-            author{
-                name
-              }
-            published
-            genres
-        }
-    }
+  query {
+      allBooks {
+         ...BookDetails
+      }
+  }  
+ ${BOOK_DETAILS}
 `
 
 export const ME_INFO = gql`
@@ -33,33 +49,29 @@ export const ME_INFO = gql`
 `
 
 export const CREATE_BOOK = gql`
-    mutation createBook($title: String!, $author: String!, $published: Int!, $genres: [String!]!) {
-        addBook(
-          title: $title,
-          authorName: $author,
-          published: $published,
-          genres: $genres
-        ) {
-            title
-            author{
-              name
-            }
-            published
-          }
-    }
-  `
+  mutation createBook($title: String!, $author: String!, $published: Int!, $genres: [String!]!) {
+      addBook(
+        title: $title,
+        authorName: $author,
+        published: $published,
+        genres: $genres
+      ) {
+          ...BookDetails
+        }
+  }
+ ${BOOK_DETAILS}
+`
 
   export const SET_BIRTH_YEAR = gql`
   mutation setBirthYear($name: String!, $born: Int!) {
     editAuthor(
-        name: $name, 
-        setBornTo: $born
-        ) {
-        name
-        born
-        bookCount
-    }
+      name: $name, 
+      setBornTo: $born
+      ) {
+        ...AuthorDetails
+      }
   }
+  ${AUTHOR_DETAILS}
 `
 
 export const LOGIN = gql`
@@ -68,4 +80,13 @@ export const LOGIN = gql`
       value
     }
   }
+`
+export const BOOK_ADDED = gql`
+  subscription {
+    bookAdded {
+      ...BookDetails
+    }
+  }
+  
+${BOOK_DETAILS}
 `
