@@ -9,6 +9,7 @@ const mongoose = require('mongoose')
 const Author = require('./models/author')
 const Book = require('./models/book')
 const User = require('./models/user')
+const author = require('./models/author')
 
 const JWT_SECRET = 'mountains'
 const MONGODB_URI = 'mongodb+srv://fullstackyumo:huafazuobinshuang4716@cluster0.chkuj.mongodb.net/library-app?retryWrites=true&w=majority'
@@ -23,11 +24,13 @@ mongoose.connect(MONGODB_URI)
     console.log('error connecting to MongoDB:', error.message)
   })
 
+// mongoose.set('debug', true)
 
 const typeDefs = gql`
   type Author {
     name: String!
     born: Int
+    myBooks: [Book!]
     bookCount: Int
     id: ID!
   }
@@ -104,16 +107,17 @@ const resolvers = {
       } 
       return await Book.find({}).populate('author')
     }, 
-    allAuthors: async () => await Author.find({}),
+    allAuthors: async () => {      
+      // console.log("Author.find")
+      return  await Author.find({}).populate('myBooks')
+    },
     me: (root, args, context) => {
       return context.currentUser
     }
   },
   Author: {
     bookCount: async (root) => {
-      const mybookCount = await Book.find({'author': root.id})
-      // console.log('-------------what is mybookCount-------', mybookCount.length)
-      return mybookCount.length
+      return root.myBooks.length
     }
   },
   Mutation: {
@@ -122,12 +126,11 @@ const resolvers = {
       if (!currentUser) {
         throw new AuthenticationError("not authenticated")
       }
-
       let book
-
+      let author
       const existedAuthor = await Author.findOne({ name: args.authorName })      
       if (!existedAuthor) {     
-        const author = new Author({ name: args.authorName, born: args.authorBorn })  
+        author = new Author({ name: args.authorName, born: args.authorBorn })  
         try {
           await author.save()
         } catch (error) {
@@ -141,7 +144,14 @@ const resolvers = {
       }
       
       try {
-          await book.save()
+          const savedBook = await book.save()
+          if (author) {
+            author.myBooks.push(savedBook._id)                   
+            await author.save()
+          } else {
+            existedAuthor.myBooks.push(savedBook._id)                   
+            await existedAuthor.save()
+          }         
         } catch (error) {
           throw new UserInputError(error.message, {
             invalidArgs: args,
