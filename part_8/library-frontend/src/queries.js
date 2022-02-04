@@ -39,6 +39,15 @@ export const ALL_BOOKS = gql`
  ${BOOK_DETAILS}
 `
 
+export const FIND_BOOK_BY_GENRE = gql`
+  query findBookByGenre($nameOfGenre: String) {
+      allBooks(genre: $nameOfGenre) {
+        ...BookDetails
+      }
+  }
+ ${BOOK_DETAILS}
+`
+
 export const ME_INFO = gql`
     query {
         me {
