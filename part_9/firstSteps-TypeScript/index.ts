@@ -3,7 +3,7 @@
 // but the package 'ts-node-dev' uses version 9.1.1 of ts-node, so finally I changed the version of ts-node from 10.4.0 to 9.1.1:
 
 // import express from 'express';   //this line works for 'npm start' (ts-node: 10.4.0)
-import * as express from 'express'; //this line works for 'npm run dev', ts-node-dev ver. 1.1.8 (using ts-node ver. 9.1.1, typescript ver. 4.5.5)
+import express = require('express'); //this line works for 'npm run dev', ts-node-dev ver. 1.1.8 (using ts-node ver. 9.1.1, typescript ver. 4.5.5)
 import { parseArguments, calculateBmi } from './bmiCalculator'
 const app = express();
 
