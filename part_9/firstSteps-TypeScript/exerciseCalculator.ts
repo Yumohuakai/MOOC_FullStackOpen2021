@@ -9,9 +9,9 @@ interface InputValues {
     // console.log('-------what is args----', args);
     if (args.length < 4) throw new Error('Not enough arguments');
 
-    let inputs = {
+    const inputs: InputValues = {
         value1: 0,
-        value2: [] as any
+        value2: []
       };
   
     if (!isNaN(Number(args[2]))) {
@@ -31,7 +31,7 @@ interface InputValues {
     // console.log('-------what is inputs--value1--', inputs.value1);    
     // console.log('-------what is inputs---value2-', inputs.value2);
     return inputs;
-  }
+  };
 
   
 interface Result {
@@ -45,7 +45,7 @@ interface Result {
 }
 
 const calculateExercises = (dailyHours: Array<number>, targetDailyHours: number): Result => {
-    let result = {
+    const result = {
         periodLength:0,
         trainingDays: 0,
         success: false,
@@ -86,13 +86,13 @@ const calculateExercises = (dailyHours: Array<number>, targetDailyHours: number)
     }
 
     return result;
-}
+};
 
 try {
     const { value1, value2 } = parseArgForEx(process.argv);
     console.log(calculateExercises(value2, value1));
   } catch (error: unknown) {
-    let errorMessage = 'Something bad happened.'
+    let errorMessage = 'Something bad happened.';
     if (error instanceof Error) {
       errorMessage += ' Error: ' + error.message;
     }

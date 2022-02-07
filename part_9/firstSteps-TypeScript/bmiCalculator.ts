@@ -5,7 +5,7 @@ interface MultiplyValues {
   value2: number;
 }
 
-const parseArguments = (arg: any): MultiplyValues => {
+const parseArguments = (arg:{height: string; weight: string}): MultiplyValues => {
   // console.log('-------what is arg----', arg);  
   if (!arg.height || !arg.weight) throw new Error('No argument of height or weight');
 
@@ -13,11 +13,11 @@ const parseArguments = (arg: any): MultiplyValues => {
     return {
       value1: Number(arg.height),
       value2: Number(arg.weight)
-    }
+    };
   } else {
     throw new Error('Provided values were not numbers!');
   }
-}
+};
 
 
 const calculateBmi = (heightInCM: number, weightInKg: number): string => {
@@ -43,7 +43,7 @@ const calculateBmi = (heightInCM: number, weightInKg: number): string => {
       message = 'Obese (Class III)';
   }
   return message;
-}
+};
 
 export { parseArguments };
 export { calculateBmi };
