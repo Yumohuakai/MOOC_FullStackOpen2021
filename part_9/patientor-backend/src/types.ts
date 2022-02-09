@@ -1,15 +1,21 @@
+export enum Gender {
+    Male = 'male',
+    Female = 'female',
+    Other = 'other',
+}
+
 export interface Diagnose {
     code: string;
     name: string;
     latin?: string;
 }
 
-interface PatientOrigin {
+export interface PatientOrigin {
     id: string;
     name: string;
     dateOfBirth: string;
     ssn: string;
-    gender: string;
+    gender: Gender;
     occupation: string;
 }
 
