@@ -1,0 +1,10 @@
+POST http://localhost:3001/api/patients 
+Content-Type: application/json
+
+{
+    "name": "Ann Kuu",
+    "dateOfBirth": "1951-05-01",
+    "ssn": "010551-1889",
+    "gender": "female",
+    "occupation": "game maker"
+}
