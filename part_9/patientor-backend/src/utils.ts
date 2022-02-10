@@ -37,6 +37,24 @@ const parseGender = (gender: unknown): Gender => {
     return gender;
 };
 
+const parseSsn = (ssn: unknown, birthDate: string): string => {
+    const pssn = parseStringField(ssn, "ssn");
+   
+    const sday: string = pssn.slice(0,2);
+    const smon: string = pssn.slice(2,4);
+    const syear: string = pssn.slice(4,6);
+    
+    const byear: string = birthDate.slice(2,4);
+    const bmon: string = birthDate.slice(5,7);
+    const bday: string = birthDate.slice(8,10);
+
+    if (sday !== bday || smon !== bmon || syear !== byear) {
+        throw new Error('Incorrect SSN: date of birth and SSN do not match: ' + ssn + ' VS. ' + birthDate);
+     }
+
+    return pssn;
+};
+
 type Fields = { name: unknown, dateOfBirth: unknown, gender: unknown, occupation: unknown, ssn: unknown };
 
 const toNewPatient = ({ name, dateOfBirth, gender, occupation, ssn } : Fields): NewPatient => {
@@ -45,7 +63,7 @@ const toNewPatient = ({ name, dateOfBirth, gender, occupation, ssn } : Fields): 
       dateOfBirth: parseDateField(dateOfBirth),
       gender: parseGender(gender),
       occupation: parseStringField(occupation, "occupation"),
-      ssn: parseStringField(ssn, "ssn")
+      ssn: parseSsn(ssn, parseDateField(dateOfBirth))
     };
   
     return newPatient;

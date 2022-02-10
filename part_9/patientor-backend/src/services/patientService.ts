@@ -3,17 +3,6 @@ import { PatientOrigin, Patient, NewPatient } from '../types';
 import toNewPatient from "../utils";
 import {v1 as uuid} from 'uuid';
 
-
-// const getPatients = (): Array<Patient> => {
-  // return patients.map(({ id, name, dateOfBirth, gender, occupation }) => ({
-  //   id,
-  //   name,
-  //   dateOfBirth,
-  //   gender,
-  //   occupation,
-  // }));
-// };
-
 const getPatients = (): Array<Patient> => {
   // because we use the enum for Gender, we have to map the initial data elements to PatientOrigin type with the toNewPatient function
   return patients.map(obj => {
