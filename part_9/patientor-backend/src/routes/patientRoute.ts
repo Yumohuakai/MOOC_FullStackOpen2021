@@ -6,8 +6,18 @@ const patientR = express.Router();
 
 patientR.get('/', (_req, res) => {
     res.send(patientService.getPatients());
-
 });
+
+patientR.get('/:id', (req, res) => {
+  const patient = patientService.findById(req.params.id);
+
+  if (patient) {
+    res.send(patient);
+  } else {
+    res.sendStatus(404);
+  }
+});
+
 
 patientR.post('/', (req, res) => {
   try {
