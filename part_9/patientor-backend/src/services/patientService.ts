@@ -17,9 +17,10 @@ const formattedPatients = ():  Array<PatientOrigin> => {
 
 const getPatients = (): Array<Patient> => {
   
-  return formattedPatients().map(({ id, name, dateOfBirth, gender, occupation, entries }) => ({
+  return formattedPatients().map(({ id, name, ssn, dateOfBirth, gender, occupation, entries }) => ({
       id,
       name,
+      ssn,
       dateOfBirth,
       gender,
       occupation,
