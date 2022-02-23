@@ -19,7 +19,6 @@ const PatientDetailsPage = () => {
           `${apiBaseUrl}/patients/${id}`
         );
         dispatch({ type: "SET_ONE_PATIENT", payload: patientDetailsFromApi });
-        // console.log('---what is patientDetailsFromApi---', patientDetailsFromApi);
       } catch (e) {
         console.error(e);
       }
@@ -27,8 +26,6 @@ const PatientDetailsPage = () => {
     void fetchPatientDetails(id);
   }, [dispatch]);
  
-  // console.log('----waht is patients---', patients[id].name);
-
   return (
     <div className="App">
       <Header as="h1">

@@ -17,19 +17,17 @@ const formattedPatients = ():  Array<PatientOrigin> => {
 
 const getPatients = (): Array<Patient> => {
   
-  return formattedPatients().map(({ id, name, ssn, dateOfBirth, gender, occupation, entries }) => ({
+  return formattedPatients().map(({ id, name, dateOfBirth, gender, occupation }) => ({
       id,
       name,
-      ssn,
       dateOfBirth,
       gender,
-      occupation,
-      entries
+      occupation
     }));
 };
 
 
-const findById = (id: string): Patient | undefined => {
+const findById = (id: string): PatientOrigin | undefined => {
   const entry = formattedPatients().find(p => p.id === id);
   return entry;
 };

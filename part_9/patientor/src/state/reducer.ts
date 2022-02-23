@@ -37,8 +37,15 @@ export const reducer = (state: State, action: Action): State => {
         }
       };
     case "SET_ONE_PATIENT":
+      // console.log('----reducer.ts---what is state.patients[action.payload.id].ssn---', state.patients[action.payload.id].ssn);
+      if (state.patients[action.payload.id].ssn) {
+        // console.log("----clicked patient----------");
+        return { ...state };
+      }
+      
+      // console.log("----new patient----------");
       return {
-        ...state,
+        // ...state,
         patients: {
           ...state.patients,
           [action.payload.id]: action.payload
