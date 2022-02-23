@@ -1,12 +1,23 @@
-import rawPatients from '../../data/patients.json';
+// import rawPatients from '../../data/oldVersionOfPatients.json';
+import patients from '../../data/patients';
 import { PatientOrigin, Patient, NewPatient } from '../types';
 import toNewPatient from "../utils";
 import {v1 as uuid} from 'uuid';
 
-// because we use the enum for Gender, 
+// because we use the enum for Gender, also for the validation purpose
 // we have to map the initial data elements to PatientOrigin type with the toNewPatient function
+// this part is only used before exercise 9.19 starts
+// const formattedPatients = ():  Array<PatientOrigin> => {
+//   return rawPatients.map(obj => {
+//     const object = toNewPatient(obj) as PatientOrigin;
+//     object.id = obj.id;
+//     return object;
+//     });
+// };
+
+// validation all fields (except entries) of patients by calling 'toNewPatient'
 const formattedPatients = ():  Array<PatientOrigin> => {
-  return rawPatients.map(obj => {
+  return patients.map(obj => {
     const object = toNewPatient(obj) as PatientOrigin;
     object.id = obj.id;
     return object;
@@ -40,7 +51,7 @@ const addPatient = ( entry: NewPatient ): Patient => {
     ...entry
   };
 
-  rawPatients.push(newPatient);
+  patients.push(newPatient);
   return newPatient;
 };
 
