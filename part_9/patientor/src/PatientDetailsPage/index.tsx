@@ -10,7 +10,7 @@ import { setOnePatient } from "../state/reducer";
 
 
 const PatientDetailsPage = () => {
-  const [{ patients }, dispatch] = useStateValue(); 
+  const [{ patients, diagnoses }, dispatch] = useStateValue(); 
   const { id } = useParams<{ id: string }>();
   
   React.useEffect(() => { 
@@ -28,6 +28,8 @@ const PatientDetailsPage = () => {
     void fetchPatientDetails(id);
   }, [dispatch]);
 //  console.log("---what is entries---", patients[id].entries);
+  // console.log("----new state---diagnoses--", diagnoses);
+  // console.log("----new state---patients--", patients);
   return (
     <div className="App">
       <Header as="h1">
@@ -65,7 +67,7 @@ const PatientDetailsPage = () => {
         ? patients[id].entries.map(e =>
             e.diagnosisCodes
             ? <ul key={e.id}>
-                {e.diagnosisCodes.map(d => <li key={d}> {d} </li>)}
+                {e.diagnosisCodes.map(d => <li key={d}> {d} - {diagnoses[d].name} </li>)}
               </ul>
             : null
         )
