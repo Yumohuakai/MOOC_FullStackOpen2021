@@ -27,7 +27,7 @@ const PatientDetailsPage = () => {
     };
     void fetchPatientDetails(id);
   }, [dispatch]);
- 
+//  console.log("---what is entries---", patients[id].entries);
   return (
     <div className="App">
       <Header as="h1">
@@ -45,7 +45,33 @@ const PatientDetailsPage = () => {
       </p>
       <p>
         occupation: {patients[id].occupation} 
-      </p> 
+      </p>
+
+      {patients[id].entries
+        ? patients[id].entries.length !== 0 
+          ? <h3> entries </h3> 
+          : null
+        : null
+      } 
+      
+      {patients[id].entries 
+        ? patients[id].entries.map(e =>
+          <p key={e.id}> {e.date} {e.description} </p>
+        )
+        : null
+      } 
+
+      {patients[id].entries 
+        ? patients[id].entries.map(e =>
+            e.diagnosisCodes
+            ? <ul key={e.id}>
+                {e.diagnosisCodes.map(d => <li key={d}> {d} </li>)}
+              </ul>
+            : null
+        )
+        : null
+      }      
+
     </div>
   );
 };
