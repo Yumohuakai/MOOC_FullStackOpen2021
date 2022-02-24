@@ -6,11 +6,11 @@ const getDiagnoses = (): Array<Diagnosis> => {
 };
 
 
-const addDiagnose = () => {
+const addDiagnosis = () => {
   return null;
 };
 
 export default {
     getDiagnoses,
-    addDiagnose
+    addDiagnosis
 };
