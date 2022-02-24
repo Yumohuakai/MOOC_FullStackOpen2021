@@ -1,12 +1,124 @@
 import React from "react";
-import { Header, Icon } from "semantic-ui-react";
+import { Header, Icon, Segment } from "semantic-ui-react";
 
 import axios from "axios";
-import { Patient } from "../types";
+import { Patient, Entry, Diagnosis, HealthCheckEntry, HospitalEntry, OccupationalHealthcareEntry } from "../types";
 import { apiBaseUrl } from "../constants";
 import { useStateValue } from "../state";
 import { useParams } from 'react-router-dom';
 import { setOnePatient } from "../state/reducer";
+
+
+ const HealthCheck = ({ entryInfo, diagnoses }: {entryInfo: HealthCheckEntry, diagnoses: { [code: string]: Diagnosis }}) => (
+    <>
+      <Segment>
+        <Header as="h4"> 
+          {entryInfo.date}   
+          <Icon name='user md' />
+        </Header>
+        <Header as="h5"> {entryInfo.specialist} </Header>
+        <p style={{color: "grey"}}><i> {entryInfo.description} </i></p>
+        {
+          entryInfo.diagnosisCodes
+            ? <ul key={entryInfo.id}>
+                {entryInfo.diagnosisCodes.map(d => <li key={d}> {d} - {diagnoses[d].name} </li>)}
+              </ul>
+            : null
+        }
+        <p> {
+              entryInfo.healthCheckRating === 0
+                ? <Icon color="green"  name='heart' />
+                : entryInfo.healthCheckRating === 1
+                  ? <Icon color="yellow"  name='heart' />
+                    : entryInfo.healthCheckRating === 2
+                      ? <Icon color="orange"  name='heart' />
+                      : <Icon color="red"  name='heart' />
+            } 
+        </p>
+      </Segment>
+    </>
+ );
+
+ const Hospital = ({ entryInfo, diagnoses }: {entryInfo: HospitalEntry, diagnoses: { [code: string]: Diagnosis }}) => (
+    <>
+      <Segment>
+        <Header as="h4"> 
+          {entryInfo.date}   
+          <Icon name='hospital' />
+        </Header>
+        <Header as="h5"> {entryInfo.specialist} </Header>
+        <p style={{color: "grey"}}><i> {entryInfo.description} </i></p>
+        {
+          entryInfo.diagnosisCodes
+            ? <ul key={entryInfo.id}>
+                {entryInfo.diagnosisCodes.map(d => <li key={d}> {d} - {diagnoses[d].name} </li>)}
+              </ul>
+            : null
+        }
+        <p> 
+          <Icon name='flag checkered' />
+          {entryInfo.discharge.date}: {entryInfo.discharge.criteria} 
+        </p>
+      </Segment>
+    </>
+);
+
+const OccupationalHealthcare = ({ entryInfo, diagnoses }: {entryInfo: OccupationalHealthcareEntry, diagnoses: { [code: string]: Diagnosis }}) => (
+  <>
+    <Segment>
+        <Header as="h4"> 
+          {entryInfo.date}   
+          <Icon name='stethoscope' />
+          {entryInfo.employerName}
+        </Header>
+        <Header as="h5"> {entryInfo.specialist} </Header>
+        <p style={{color: "grey"}}><i> {entryInfo.description} </i></p>
+        {
+          entryInfo.diagnosisCodes
+            ? <ul key={entryInfo.id}>
+                {entryInfo.diagnosisCodes.map(d => <li key={d}> {d} - {diagnoses[d].name} </li>)}
+              </ul>
+            : null
+        }
+        {
+          entryInfo.sickLeave
+            ? <p>                
+                <Icon name='calendar alternate' />                
+                {entryInfo.sickLeave.startDate} ~ {entryInfo.sickLeave.endDate}
+              </p>
+            : null
+        }
+      </Segment>
+  </>
+);
+
+/**
+ * Helper function for exhaustive type checking
+ */
+ const assertNever = (value: never): never => {
+  throw new Error(
+    `Unhandled discriminated union member: ${JSON.stringify(value)}`
+  );
+};
+
+const EntryDetails = ({ entryInfo, diagnoses }: {entryInfo: Entry, diagnoses: { [code: string]: Diagnosis }}) => {
+  switch(entryInfo.type) {
+    case "HealthCheck":
+      return <HealthCheck entryInfo={entryInfo} diagnoses={diagnoses} />;
+      break;
+    
+    case "Hospital":
+      return <Hospital entryInfo={entryInfo} diagnoses={diagnoses} />;
+      break;
+    
+    case "OccupationalHealthcare":
+      return <OccupationalHealthcare entryInfo={entryInfo} diagnoses={diagnoses} />;
+      break;
+    
+    default:
+      return assertNever(entryInfo);
+  }
+};
 
 
 const PatientDetailsPage = () => {
@@ -27,9 +139,7 @@ const PatientDetailsPage = () => {
     };
     void fetchPatientDetails(id);
   }, [dispatch]);
-//  console.log("---what is entries---", patients[id].entries);
   // console.log("----new state---diagnoses--", diagnoses);
-  // console.log("----new state---patients--", patients);
   return (
     <div className="App">
       <Header as="h1">
@@ -42,38 +152,26 @@ const PatientDetailsPage = () => {
               : <Icon name='neuter' />
         }
       </Header>
-      <p>
+      <Header as="h4">
         ssn: {patients[id].ssn} 
-      </p>
-      <p>
+      </Header>
+      <Header as="h4">
         occupation: {patients[id].occupation} 
-      </p>
+      </Header>
 
       {patients[id].entries
         ? patients[id].entries.length !== 0 
-          ? <h3> entries </h3> 
+          ? <Header as="h3"> entries </Header>
           : null
         : null
       } 
-      
+
       {patients[id].entries 
         ? patients[id].entries.map(e =>
-          <p key={e.id}> {e.date} {e.description} </p>
+          <EntryDetails key={e.id} entryInfo={e} diagnoses={diagnoses}/>
         )
         : null
       } 
-
-      {patients[id].entries 
-        ? patients[id].entries.map(e =>
-            e.diagnosisCodes
-            ? <ul key={e.id}>
-                {e.diagnosisCodes.map(d => <li key={d}> {d} - {diagnoses[d].name} </li>)}
-              </ul>
-            : null
-        )
-        : null
-      }      
-
     </div>
   );
 };
