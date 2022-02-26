@@ -1,0 +1,55 @@
+POST http://localhost:3001/api/patients/d27736ec-f723-11e9-8f0b-362b9e155667/entries 
+Content-Type: application/json
+
+# {
+#     "date": "2020-02-20",
+#     "specialist": "Turkun savu terveystalo",
+#     "type": "OccupationalHealthcare",
+#     "description": "Patient accidently burnt left hand thumb during working.",
+#     "employerName": "Kodin pizza",
+#     "sickLeave": {
+#         "startDate": "2020-02-20",
+#         "endDate": "2020-03-01"
+#     }
+# }
+
+
+# {
+#     "date": "2020-02-15",
+#     "specialist": "Mehillainen terveystalo",
+#     "type": "HealthCheck",
+#     "description": "Patient accidently hurt left leg during jogging.",
+#     "healthCheckRating": 2, 
+#     "diagnosisCodes": [ "L20", "F43.2" ]
+# }
+
+
+# {
+#     "date": "2020-02-02",
+#     "specialist": "Turkun terveyskeskus",
+#     "type": "Hospital",
+#     "description": "Patient got food stucking in the throat.",
+#     "discharge": {
+#         "date": "2020-02-10",
+#         "criteria": "Throat has healed."
+#     }
+# }
+
+# {
+#     "date": "2020-02-02",
+#     "specialist": "Turkun terveyskeskus",
+#     "type": "nothing",
+#     "description": "Patient got fish bone stucking in the throat.",
+#     "discharge": {
+#         "date": "2020-02-10",
+#         "criteria": "Throat has healed."
+#     }
+# }
+
+{
+    "date": "2020-02-02",
+    "specialist": "Turkun terveyskeskus",
+    "type": "nothing",
+    "description": "Patient got fish bone stucking in the throat.",
+    "diagnosisCodes": ["H54.7"]
+}

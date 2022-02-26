@@ -1,6 +1,6 @@
 // import rawPatients from '../../data/oldVersionOfPatients.json';
 import patients from '../../data/patients';
-import { PatientOrigin, Patient, NewPatient } from '../types';
+import { PatientOrigin, Patient, NewPatient, NewEntry, Entry } from '../types';
 import toNewPatient from "../utils";
 import {v1 as uuid} from 'uuid';
 
@@ -55,8 +55,23 @@ const addPatient = ( entry: NewPatient ): Patient => {
   return newPatient;
 };
 
+
+const addEntriesToPatient = ( patient: PatientOrigin, entry: NewEntry ): Entry => {  
+  const newEntry = {
+    id: uuid(),
+    ...entry
+  };
+
+  patient
+    ? patient.entries.push(newEntry)
+    : null;
+
+  return newEntry;
+};
+
 export default {
     getPatients,
     findById,
-    addPatient
+    addPatient,
+    addEntriesToPatient
 };
