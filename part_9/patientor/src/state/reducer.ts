@@ -6,18 +6,22 @@ export type Action =
     type: "SET_DIAGNOSIS_LIST";
     payload: Diagnosis[];
   }
-  | {
-      type: "SET_PATIENT_LIST";
-      payload: Patient[];
-    }
-  | {
-      type: "ADD_PATIENT";
-      payload: Patient;
-    }
-  | {
-      type: "SET_ONE_PATIENT";
-      payload: Patient;
-    };
+| {
+    type: "SET_PATIENT_LIST";
+    payload: Patient[];
+  }
+| {
+    type: "ADD_PATIENT";
+    payload: Patient;
+  }
+| {
+    type: "SET_ONE_PATIENT";
+    payload: Patient;
+  }
+| {
+    type: "ADD_ENTRY_TO_PATIENT";
+    payload: Patient;
+  };
 
 export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
@@ -66,6 +70,14 @@ export const reducer = (state: State, action: Action): State => {
           [action.payload.id]: action.payload
         }
       };
+    case "ADD_ENTRY_TO_PATIENT":
+      return {
+        ...state,
+        patients: {
+          ...state.patients,
+          [action.payload.id]: action.payload
+        }
+      };
     default:
       return state;
   }
@@ -85,4 +97,8 @@ export const addPatient = (newPatient: Patient): Action => {
 
 export const setOnePatient = (selectedPatient: Patient): Action => {
   return {type: "SET_ONE_PATIENT", payload: selectedPatient};
+};
+
+export const addEntryToSelectedPatient = (selectedPatient: Patient): Action => {
+  return {type: "ADD_ENTRY_TO_PATIENT", payload: selectedPatient};
 };

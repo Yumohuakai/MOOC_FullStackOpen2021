@@ -1,12 +1,15 @@
 import React from "react";
-import { Header, Icon, Segment } from "semantic-ui-react";
+import { Header, Icon, Segment, Button } from "semantic-ui-react";
 
 import axios from "axios";
-import { Patient, Entry, Diagnosis, HealthCheckEntry, HospitalEntry, OccupationalHealthcareEntry } from "../types";
+import { Patient, Entry, Diagnosis, HealthCheckEntry, HospitalEntry, OccupationalHealthcareEntry, EntryType } from "../types";
 import { apiBaseUrl } from "../constants";
 import { useStateValue } from "../state";
 import { useParams } from 'react-router-dom';
-import { setOnePatient } from "../state/reducer";
+import { setOnePatient, addEntryToSelectedPatient } from "../state/reducer";
+import AddEntryModal from "../AddEntryModal";
+import { OccupationalHealthcareEntryFormValues } from "../AddEntryModal/AddEntryForm";
+// import { addEntryToSelectedPatient } from "../state/reducer";
 
 
  const HealthCheck = ({ entryInfo, diagnoses }: {entryInfo: HealthCheckEntry, diagnoses: { [code: string]: Diagnosis }}) => (
@@ -103,15 +106,15 @@ const OccupationalHealthcare = ({ entryInfo, diagnoses }: {entryInfo: Occupation
 
 const EntryDetails = ({ entryInfo, diagnoses }: {entryInfo: Entry, diagnoses: { [code: string]: Diagnosis }}) => {
   switch(entryInfo.type) {
-    case "HealthCheck":
+    case EntryType.HealthCheck:
       return <HealthCheck entryInfo={entryInfo} diagnoses={diagnoses} />;
       break;
     
-    case "Hospital":
+    case EntryType.Hospital:
       return <Hospital entryInfo={entryInfo} diagnoses={diagnoses} />;
       break;
     
-    case "OccupationalHealthcare":
+    case EntryType.OccupationalHealthcare:
       return <OccupationalHealthcare entryInfo={entryInfo} diagnoses={diagnoses} />;
       break;
     
@@ -123,7 +126,16 @@ const EntryDetails = ({ entryInfo, diagnoses }: {entryInfo: Entry, diagnoses: { 
 
 const PatientDetailsPage = () => {
   const [{ patients, diagnoses }, dispatch] = useStateValue(); 
-  const { id } = useParams<{ id: string }>();
+  const { id } = useParams<{ id: string }>();  
+
+  const [modalOpen, setModalOpen] = React.useState<boolean>(false); 
+  const [error, setError] = React.useState<string | undefined>();
+  const openModal = (): void => setModalOpen(true);
+
+  const closeModal = (): void => {
+    setModalOpen(false);
+    setError(undefined);
+  };
   
   React.useEffect(() => { 
 
@@ -140,6 +152,23 @@ const PatientDetailsPage = () => {
     void fetchPatientDetails(id);
   }, [dispatch]);
   // console.log("----new state---diagnoses--", diagnoses);
+
+
+  const submitNewEntry = async (values: OccupationalHealthcareEntryFormValues) => {
+    try {
+      const { data: selectedPatient } = await axios.post<Patient>(
+        `${apiBaseUrl}/patients/${id}/entries`,
+        values
+      );
+      dispatch(addEntryToSelectedPatient(selectedPatient));
+      closeModal();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (e: any) {
+      console.error(e.response?.data || 'Unknown Error');
+      setError(e.response?.data?.error || 'Unknown error');
+    }
+  };
+
   return (
     <div className="App">
       <Header as="h1">
@@ -172,6 +201,14 @@ const PatientDetailsPage = () => {
         )
         : null
       } 
+
+      <AddEntryModal
+        modalOpen={modalOpen}
+        onSubmit={submitNewEntry}
+        error={error}
+        onClose={closeModal}
+      />
+      <Button onClick={() => openModal()}>Add New Entry</Button>
     </div>
   );
 };
