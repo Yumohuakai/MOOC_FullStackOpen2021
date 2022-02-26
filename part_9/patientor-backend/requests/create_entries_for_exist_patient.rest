@@ -1,18 +1,22 @@
 POST http://localhost:3001/api/patients/d27736ec-f723-11e9-8f0b-362b9e155667/entries 
 Content-Type: application/json
 
-# {
-#     "date": "2020-02-20",
-#     "specialist": "Turkun savu terveystalo",
-#     "type": "OccupationalHealthcare",
-#     "description": "Patient accidently burnt left hand thumb during working.",
-#     "employerName": "Kodin pizza",
-#     "sickLeave": {
-#         "startDate": "2020-02-20",
-#         "endDate": "2020-03-01"
-#     }
-# }
 
+# good example to test 1
+{
+    "date": "2020-02-20",
+    "specialist": "Turkun savu terveystalo",
+    "type": "OccupationalHealthcare",
+    "description": "Patient accidently burnt left hand thumb during working.",
+    "employerName": "Kodin pizza",
+    "sickLeave": {
+        "startDate": "2020-02-20",
+        "endDate": "2020-03-01"
+    }
+}
+
+
+# good example to test 2
 
 # {
 #     "date": "2020-02-15",
@@ -23,6 +27,8 @@ Content-Type: application/json
 #     "diagnosisCodes": [ "L20", "F43.2" ]
 # }
 
+
+# good example to test 3
 
 # {
 #     "date": "2020-02-02",
@@ -35,6 +41,8 @@ Content-Type: application/json
 #     }
 # }
 
+
+# bad example to test 1
 # {
 #     "date": "2020-02-02",
 #     "specialist": "Turkun terveyskeskus",
@@ -46,10 +54,12 @@ Content-Type: application/json
 #     }
 # }
 
-{
-    "date": "2020-02-02",
-    "specialist": "Turkun terveyskeskus",
-    "type": "nothing",
-    "description": "Patient got fish bone stucking in the throat.",
-    "diagnosisCodes": ["H54.7"]
-}
+
+# bad example to test 2
+# {
+#     "date": "2020-02-02",
+#     "specialist": "Turkun terveyskeskus",
+#     "type": "nothing",
+#     "description": "Patient got fish bone stucking in the throat.",
+#     "diagnosisCodes": ["H54.7"]
+# }

@@ -1,6 +1,6 @@
 // import rawPatients from '../../data/oldVersionOfPatients.json';
 import patients from '../../data/patients';
-import { PatientOrigin, Patient, NewPatient, NewEntry, Entry } from '../types';
+import { PatientOrigin, Patient, NewPatient, NewEntry } from '../types';
 import toNewPatient from "../utils";
 import {v1 as uuid} from 'uuid';
 
@@ -56,7 +56,7 @@ const addPatient = ( entry: NewPatient ): Patient => {
 };
 
 
-const addEntriesToPatient = ( patient: PatientOrigin, entry: NewEntry ): Entry => {  
+const addEntriesToPatient = ( patient: PatientOrigin, entry: NewEntry ): PatientOrigin => {  
   const newEntry = {
     id: uuid(),
     ...entry
@@ -66,7 +66,7 @@ const addEntriesToPatient = ( patient: PatientOrigin, entry: NewEntry ): Entry =
     ? patient.entries.push(newEntry)
     : null;
 
-  return newEntry;
+  return patient;
 };
 
 export default {

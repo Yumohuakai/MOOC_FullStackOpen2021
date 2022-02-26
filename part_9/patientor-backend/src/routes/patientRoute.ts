@@ -63,12 +63,12 @@ patientR.post('/:id/entries', (req, res) => {
       console.log("-----patientoute.ts--/:id/entries---what is newEntry-1--", newEntry);
 
       if (newEntry) {
-        const addedEntry = patientService.addEntriesToPatient(
+        const addedEntryWithDianosisToPatient = patientService.addEntriesToPatient(
             patient as PatientOrigin, 
             { ...newEntry, diagnosisCodes: diagnosisCodes as Array<Diagnosis['code']>}
         );
 
-        res.json(addedEntry);
+        res.json(addedEntryWithDianosisToPatient);
       } else {
         res.status(400).send("Something went wrong. Error: the entry type is not correct...");
       }
@@ -80,12 +80,12 @@ patientR.post('/:id/entries', (req, res) => {
       console.log("-----patientoute.ts--/:id/entries---what is newEntry-2--", newEntry);
       
       if (newEntry) {
-        const addedEntry = patientService.addEntriesToPatient(
+        const addedEntryToPatient = patientService.addEntriesToPatient(
             patient as PatientOrigin, 
             newEntry
         );
 
-        res.json(addedEntry);
+        res.json(addedEntryToPatient);
       } else {
         res.status(400).send("Something went wrong. Error: the entry type is not correct...");
       }      
