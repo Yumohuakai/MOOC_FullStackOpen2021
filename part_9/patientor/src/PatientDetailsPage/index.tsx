@@ -165,7 +165,10 @@ const PatientDetailsPage = () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (e: any) {
       console.error(e.response?.data || 'Unknown Error');
-      setError(e.response?.data?.error || 'Unknown error');
+      // console.log("---what is error structure--typeof--", typeof e.response?.data?.message || 'Unknown Error');
+      // console.log("---what is error structure----", e.response?.data?.message || 'Unknown Error');
+      setError(e.response?.data?.message || 'Unknown error');
+      // setError(e.response?.data?.error || 'Unknown error');
     }
   };
 

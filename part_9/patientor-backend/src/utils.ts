@@ -18,7 +18,7 @@ const isDate = (date: string): boolean => {
   
 const parseDateField = (date: unknown, fieldName: string): string => {
     if ((!date || !isString(date) || !isDate(date)) || (isString(date) && date.length !== 10)) {
-        throw new Error('Incorrect or missing '  + fieldName + date);
+        throw new Error('Incorrect or missing '  + fieldName + " " + date);
     }
     return date;
 };

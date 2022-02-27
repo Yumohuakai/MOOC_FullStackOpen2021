@@ -35,7 +35,8 @@ patientR.post('/', (req, res) => {
     if (error instanceof Error) {
       errorMessage += ' Error: ' + error.message;
     }
-    res.status(400).send(errorMessage);
+    // res.status(400).send(errorMessage);
+    res.status(400).json({message: errorMessage});
   }
 });
 
@@ -45,7 +46,8 @@ patientR.post('/:id/entries', (req, res) => {
   const patient = patientService.findById(req.params.id);
   if (!patient) {
     // res.sendStatus(404);
-    res.status(400).send("Something went wrong. Error: the patient is not exist...");      
+    // res.status(400).send("Something went wrong. Error: the patient is not exist.");   
+    res.status(400).json({message: "Something went wrong. Error: the patient is not exist."});   
   } 
 
   
@@ -70,7 +72,8 @@ patientR.post('/:id/entries', (req, res) => {
 
         res.json(addedEntryWithDianosisToPatient);
       } else {
-        res.status(400).send("Something went wrong. Error: the entry type is not correct...");
+        // res.status(400).send("Something went wrong. Error: the entry type is not correct...");
+        res.status(400).json({message: "Something went wrong. Error: the entry type is not correct."});
       }
       
       
@@ -87,7 +90,8 @@ patientR.post('/:id/entries', (req, res) => {
 
         res.json(addedEntryToPatient);
       } else {
-        res.status(400).send("Something went wrong. Error: the entry type is not correct...");
+        // res.status(400).send("Something went wrong. Error: the entry type is not correct.");
+        res.status(400).json({message: "Something went wrong. Error: the entry type is not correct."});
       }      
     }
     
@@ -96,7 +100,8 @@ patientR.post('/:id/entries', (req, res) => {
     if (error instanceof Error) {
       errorMessage += ' Error: ' + error.message;
     }
-    res.status(400).send(errorMessage);
+    // res.status(400).send(errorMessage);
+    res.status(400).json({message: errorMessage});
   }
 });
 
