@@ -1,8 +1,20 @@
 import express from 'express';
 import patientService from '../services/patientService';
 import toNewPatient from '../utils';
-import { toNewEntry } from '../utils';
-import { PatientOrigin, Diagnosis } from '../types';
+
+import { 
+  // toNewEntry, 
+  parseDateField, 
+  toNewHealthCheckEntry,
+  toNewHospitalEntry,
+  toNewOccupationalHealthcareEntry 
+} from '../utils';
+
+import { 
+  PatientOrigin, 
+  Diagnosis,
+  NewOccupationalHealthcareEntry 
+} from '../types';
 
 const patientR = express.Router();
 
@@ -17,7 +29,8 @@ patientR.get('/:id', (req, res) => {
     res.send(patient);
   } else {
     // res.sendStatus(404);
-    res.status(400).send("Something went wrong. Error: the patient is not exist...");  
+    // res.status(400).send("Something went wrong. Error: the patient is not exist...");  
+    res.status(400).json({message: "Something went wrong. Error: the patient is not exist."});  
   }
 });
 
@@ -26,7 +39,6 @@ patientR.post('/', (req, res) => {
   try {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     const newPatient = toNewPatient(req.body);
-    // console.log("-----patientoute.ts-----what is req.body---", req.body);
 
     const addedEntry = patientService.addPatient(newPatient);
     res.json(addedEntry);
@@ -49,50 +61,109 @@ patientR.post('/:id/entries', (req, res) => {
     // res.status(400).send("Something went wrong. Error: the patient is not exist.");   
     res.status(400).json({message: "Something went wrong. Error: the patient is not exist."});   
   } 
-
-  
-  console.log("-----patientoute.ts--/:id/entries---what is req.body---", req.body);
+  // console.log("---patientRoute.ts---post---req.body---", req.body);
+  // console.log("---patientRoute.ts---post---req.body.sickLeave---", req.body.sickLeave);
 
   try {
     let newBody = null;
+    let newSickLeave = null;
+
     if (req.body.diagnosisCodes) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const {diagnosisCodes, ...y} = req.body;
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      newBody = y;
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      const newEntry = toNewEntry(newBody);      
-      console.log("-----patientoute.ts--/:id/entries---what is newEntry-1--", newEntry);
 
-      if (newEntry) {
+      if (y.sickLeave && y.sickLeave.startDate && y.sickLeave.endDate) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        const {sickLeave, ...x} = y;
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        newBody = x;
+        newSickLeave = { 
+          startDate: parseDateField(sickLeave.startDate, "startDate"),          
+          endDate: parseDateField(sickLeave.endDate, "endDate")
+        };
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        const newEntry = toNewOccupationalHealthcareEntry(newBody);
+        
         const addedEntryWithDianosisToPatient = patientService.addEntriesToPatient(
-            patient as PatientOrigin, 
-            { ...newEntry, diagnosisCodes: diagnosisCodes as Array<Diagnosis['code']>}
+          patient as PatientOrigin, 
+            { ...newEntry, 
+              diagnosisCodes: diagnosisCodes as Array<Diagnosis['code']>,
+              sickLeave: newSickLeave
+            } as NewOccupationalHealthcareEntry
         );
-
         res.json(addedEntryWithDianosisToPatient);
       } else {
-        // res.status(400).send("Something went wrong. Error: the entry type is not correct...");
-        res.status(400).json({message: "Something went wrong. Error: the entry type is not correct."});
-      }
-      
-      
-    } else {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      const newEntry = toNewEntry(req.body);
-      console.log("-----patientoute.ts--/:id/entries---what is newEntry-2--", newEntry);
-      
-      if (newEntry) {
-        const addedEntryToPatient = patientService.addEntriesToPatient(
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        newBody = y;
+        if (newBody.type === "HealthCheck") {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+          const newEntry = toNewHealthCheckEntry(y);
+          const addedEntryWithDianosisToPatient = patientService.addEntriesToPatient(
             patient as PatientOrigin, 
-            newEntry
-        );
+              { ...newEntry, 
+                diagnosisCodes: diagnosisCodes as Array<Diagnosis['code']>
+              }
+          );
+          res.json(addedEntryWithDianosisToPatient);
+        }
 
-        res.json(addedEntryToPatient);
+        if (newBody.type === "Hospital") {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+          const newEntry = toNewHospitalEntry(y);
+          const addedEntryWithDianosisToPatient = patientService.addEntriesToPatient(
+            patient as PatientOrigin, 
+              { ...newEntry, 
+                diagnosisCodes: diagnosisCodes as Array<Diagnosis['code']>
+              }
+          );
+          res.json(addedEntryWithDianosisToPatient);
+        }
+        
+      }
+         
+    } else {
+      if (req.body.sickLeave && req.body.sickLeave.startDate && req.body.sickLeave.endDate) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        const {sickLeave, ...x} = req.body;
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        newBody = x;
+        newSickLeave = { 
+          startDate: parseDateField(sickLeave.startDate, "startDate"),          
+          endDate: parseDateField(sickLeave.endDate, "endDate")
+        };
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        const newEntry = toNewOccupationalHealthcareEntry(newBody);
+        
+        const addedEntryWithDianosisToPatient = patientService.addEntriesToPatient(
+          patient as PatientOrigin, 
+            { ...newEntry, 
+              sickLeave: newSickLeave
+            } as NewOccupationalHealthcareEntry
+        );
+        res.json(addedEntryWithDianosisToPatient);
       } else {
-        // res.status(400).send("Something went wrong. Error: the entry type is not correct.");
-        res.status(400).json({message: "Something went wrong. Error: the entry type is not correct."});
-      }      
+        if (req.body.type === "HealthCheck") {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+          const newEntry = toNewHealthCheckEntry(req.body);
+          const addedEntryWithDianosisToPatient = patientService.addEntriesToPatient(
+            patient as PatientOrigin, 
+              { ...newEntry }
+          );
+          res.json(addedEntryWithDianosisToPatient);
+        }
+
+        if (req.body.type === "Hospital") {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+          const newEntry = toNewHospitalEntry(req.body);
+          const addedEntryWithDianosisToPatient = patientService.addEntriesToPatient(
+            patient as PatientOrigin, 
+              { ...newEntry }
+          );
+          res.json(addedEntryWithDianosisToPatient);
+        }
+        
+      }
+     
     }
     
   } catch (error: unknown) {

@@ -1,15 +1,29 @@
-import React from "react";
-import { Header, Icon, Segment, Button } from "semantic-ui-react";
+import React, { useState } from "react";
+import { Header, Icon, Segment, Button, Menu } from "semantic-ui-react";
 
 import axios from "axios";
-import { Patient, Entry, Diagnosis, HealthCheckEntry, HospitalEntry, OccupationalHealthcareEntry, EntryType } from "../types";
+import { 
+  Patient, 
+  Entry, 
+  Diagnosis, 
+  HealthCheckEntry, 
+  HospitalEntry, 
+  OccupationalHealthcareEntry, 
+  EntryType,
+  HealthCheckEntryFormValues,
+  HospitalEntryFormValues,
+  OccupationalHealthcareEntryFormValues
+} from "../types";
+
 import { apiBaseUrl } from "../constants";
 import { useStateValue } from "../state";
 import { useParams } from 'react-router-dom';
 import { setOnePatient, addEntryToSelectedPatient } from "../state/reducer";
-import AddEntryModal from "../AddEntryModal";
-import { OccupationalHealthcareEntryFormValues } from "../AddEntryModal/AddEntryForm";
-// import { addEntryToSelectedPatient } from "../state/reducer";
+import { 
+  // AddOccupationalHealthcarEntryModal, 
+  AddHospitalEntryModal, 
+  AddHealthCheckEntryModal 
+} from "../AddEntryModal";
 
 
  const HealthCheck = ({ entryInfo, diagnoses }: {entryInfo: HealthCheckEntry, diagnoses: { [code: string]: Diagnosis }}) => (
@@ -123,18 +137,24 @@ const EntryDetails = ({ entryInfo, diagnoses }: {entryInfo: Entry, diagnoses: { 
   }
 };
 
-
 const PatientDetailsPage = () => {
   const [{ patients, diagnoses }, dispatch] = useStateValue(); 
   const { id } = useParams<{ id: string }>();  
 
-  const [modalOpen, setModalOpen] = React.useState<boolean>(false); 
-  const [error, setError] = React.useState<string | undefined>();
+  const [modalOpen, setModalOpen] = useState<boolean>(false); 
+  const [error, setError] = useState<string | undefined>();
+  const [typeOfEntry, setTypeOfEntry] = useState<string>("");
+  
   const openModal = (): void => setModalOpen(true);
 
   const closeModal = (): void => {
     setModalOpen(false);
     setError(undefined);
+  };
+
+  const handleItemClick = (name: string) => {
+    // console.log("---what is selected type---", name);
+    setTypeOfEntry(name);
   };
   
   React.useEffect(() => { 
@@ -144,6 +164,7 @@ const PatientDetailsPage = () => {
         const { data: patientDetailsFromApi } = await axios.get<Patient>(
           `${apiBaseUrl}/patients/${id}`
         );
+        
         dispatch(setOnePatient(patientDetailsFromApi));
       } catch (e) {
         console.error(e);
@@ -151,22 +172,23 @@ const PatientDetailsPage = () => {
     };
     void fetchPatientDetails(id);
   }, [dispatch]);
-  // console.log("----new state---diagnoses--", diagnoses);
 
-
-  const submitNewEntry = async (values: OccupationalHealthcareEntryFormValues) => {
-    try {
+  const submitNewEntry = async (
+    values: OccupationalHealthcareEntryFormValues 
+    | HospitalEntryFormValues 
+    | HealthCheckEntryFormValues 
+  ) => {
+     try {
       const { data: selectedPatient } = await axios.post<Patient>(
         `${apiBaseUrl}/patients/${id}/entries`,
         values
       );
+      // console.log("---what is values---PatientDetailsPage-index.tsx---", values);
       dispatch(addEntryToSelectedPatient(selectedPatient));
       closeModal();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (e: any) {
       console.error(e.response?.data || 'Unknown Error');
-      // console.log("---what is error structure--typeof--", typeof e.response?.data?.message || 'Unknown Error');
-      // console.log("---what is error structure----", e.response?.data?.message || 'Unknown Error');
       setError(e.response?.data?.message || 'Unknown error');
       // setError(e.response?.data?.error || 'Unknown error');
     }
@@ -205,12 +227,66 @@ const PatientDetailsPage = () => {
         : null
       } 
 
-      <AddEntryModal
-        modalOpen={modalOpen}
-        onSubmit={submitNewEntry}
-        error={error}
-        onClose={closeModal}
-      />
+      {
+        typeOfEntry === 'HealthCheck'
+          ? <AddHealthCheckEntryModal
+              modalOpen={modalOpen}
+              onSubmit={submitNewEntry}
+              error={error}
+              onClose={closeModal}
+            />
+          : null
+      }
+
+      {
+        typeOfEntry === 'Hospital'
+          ? <AddHospitalEntryModal
+              modalOpen={modalOpen}
+              onSubmit={submitNewEntry}
+              error={error}
+              onClose={closeModal}
+            />
+          : null
+      }
+
+      {/* {
+        typeOfEntry === 'OccupationalHealthcare'
+          ? <AddOccupationalHealthcarEntryModal
+              modalOpen={modalOpen}
+              onSubmit={submitNewEntry}
+              error={error}
+              onClose={closeModal}
+            />
+          : null
+      } */}
+      
+      <Header as="h4"> Please pick a type to create entry: </Header>
+      <Menu>
+        <Menu.Item
+          name='HealthCheck'
+          active={typeOfEntry === 'HealthCheck'}
+          onClick={() => handleItemClick('HealthCheck')}
+        >
+          HealthCheck
+        </Menu.Item>
+
+        <Menu.Item
+          name='Hospital'
+          active={typeOfEntry === 'Hospital'}
+          onClick={() => handleItemClick('Hospital')}
+        >
+          Hospital
+        </Menu.Item>
+
+        {/* <Menu.Item
+          name='OccupationalHealthcare'
+          active={typeOfEntry === 'OccupationalHealthcare'}
+          onClick={() => handleItemClick('OccupationalHealthcare')}
+        >
+          OccupationalHealthcare
+        </Menu.Item> */}
+      </Menu>
+      
       <Button onClick={() => openModal()}>Add New Entry</Button>
     </div>
   );

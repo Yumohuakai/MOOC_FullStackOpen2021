@@ -12,11 +12,10 @@ const parseStringField = (fieldValue: unknown, fieldName: string): string => {
 };
 
 const isDate = (date: string): boolean => {
-    // console.log('---------what happened to date------', Date.parse(date));
     return Boolean(Date.parse(date));
 };
   
-const parseDateField = (date: unknown, fieldName: string): string => {
+export const parseDateField = (date: unknown, fieldName: string): string => {
     if ((!date || !isString(date) || !isDate(date)) || (isString(date) && date.length !== 10)) {
         throw new Error('Incorrect or missing '  + fieldName + " " + date);
     }
@@ -83,17 +82,34 @@ const parseEntryType_HealthCheck = (type: unknown): EntryType.HealthCheck => {
     return type;
 };
 
+const isNumber = (number: string): boolean => {
+    const n = parseInt(number);
+    return typeof n === 'number';
+};
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const isHealthCheckRating = (param: any): param is HealthCheckRating => {
+    if (!isNumber){
+        throw new Error('Incorrect or missing healthCheckRating 1: ' + param);    
+    }
+
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    return Object.values(HealthCheckRating).includes(param);
+    return Object.values(HealthCheckRating).includes(parseInt(param));
   };
   
 const parseHealthCheckRating = (healthCheckRating: unknown): HealthCheckRating => {
-    if (!healthCheckRating || !isHealthCheckRating(healthCheckRating)) {
-        throw new Error('Incorrect or missing healthCheckRating: ' + healthCheckRating);
+    let r;
+    if (isString(healthCheckRating)) {
+        r = parseInt(healthCheckRating);
+    } else {
+        r = healthCheckRating;
     }
-    return healthCheckRating;
+
+    if (( !r && r !==0 ) || !isHealthCheckRating(r)) {
+        throw new Error('Incorrect or missing healthCheckRating 2: ' + r);
+    }
+    
+    return r ;
 };
 
 
@@ -168,25 +184,21 @@ export const toNewOccupationalHealthcareEntry = ({ date, type, specialist, descr
 export const toNewEntry = (newEntry: any): NewEntry | undefined => {
     switch(newEntry.type) {
         case "HealthCheck":
-            // console.log("-------hei, HealthCheck--- ");
             // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
             return toNewHealthCheckEntry(newEntry);
             break;
     
         case "Hospital":
-            // console.log("-------hei, Hospital--- ");
             // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
             return toNewHospitalEntry(newEntry);
             break;
 
         case "OccupationalHealthcare":
-            // console.log("-------hei, OccupationalHealthcare--- ");
             // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
             return toNewOccupationalHealthcareEntry(newEntry);
             break;
 
         default:
-            // console.log("-------hei, default case--- ");
             return undefined;    
     }
 };

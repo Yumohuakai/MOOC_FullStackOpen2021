@@ -1,10 +1,10 @@
 import React from "react";
 import { ErrorMessage, Field, FieldProps, FormikProps } from "formik";
 import { Dropdown, DropdownProps, Form } from "semantic-ui-react";
-import { Diagnosis, EntryType } from "../types";
+import { Diagnosis, EntryType, HealthCheckRating } from "../types";
 
 
-//-------------------------for exercises 9.23  - selectField for entry type-----------------
+//-------------------------for exercises 9.23  - selectField for entry type---------------------------------
   
 export type EntryTypeOption = {
     value: EntryType;
@@ -34,29 +34,60 @@ export type EntryTypeOption = {
     </Form.Field>
   );
 
-//------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------
 
+//-------------------------for exercises 9.26 - 9.27  - selectField for HealthCheckRating type-----------------
+  
+export type HealthCheckRatingTypeOption = {
+  value: HealthCheckRating;
+  label: string;
+};
 
+type HealthCheckRatingSelectFieldProps = {
+  name: string;
+  label: string;
+  options: HealthCheckRatingTypeOption[];
+};
+
+export const HealthCheckRatingSelectField = ({
+  name,
+  label,
+  options
+}: HealthCheckRatingSelectFieldProps) => (
+  <Form.Field>
+    <label>{label}</label>
+    <Field as="select" name={name} className="ui dropdown">
+      {options.map(option => (
+        <option key={option.value} value={option.value}>
+          {option.label || option.value}
+        </option>
+      ))}
+    </Field>
+  </Form.Field>
+);
+
+//--------------------------------------------------------------------------------------------------------------
 
 interface TextProps extends FieldProps {
   label: string;
   placeholder: string;
+  disabled: boolean;
 }
 
 export const TextField= ({
   field,
   label,
-  placeholder
+  placeholder,
+  disabled
 }: TextProps) => (
   <Form.Field>
     <label>{label}</label>
-    <Field placeholder={placeholder} {...field} />
+    <Field placeholder={placeholder} {...field} disabled={disabled} />
     <div style={{ color:'red' }}>
       <ErrorMessage name={field.name} />
     </div>
   </Form.Field>
 );
-
 
 
 /*
@@ -79,6 +110,42 @@ export const NumberField = ({ field, label, min, max } : NumberProps ) => (
     </div>
   </Form.Field>
 );
+
+
+// interface SickLeaveProps extends FieldProps {
+//   label: string;
+//   placeholder: string;
+// }
+
+// export const SickLeaveField= ({  
+//     setFieldValue,
+//     setFieldTouched
+//   }: {
+//     setFieldValue: FormikProps<{ sickLeave: string }>["setFieldValue"];
+//     setFieldTouched: FormikProps<{ sickLeave: string }>["setFieldTouched"];
+//   }) => {
+//     const field = "sickLeave";
+//     const onChange = (
+//       _event: React.SyntheticEvent<HTMLElement, Event>,
+//       data: DropdownProps
+//     ) => {
+//       setFieldTouched(field, true);
+//       setFieldValue(field, data.value);
+//     };
+
+//   return (
+//     <Form.Field>
+//       <label>{label}</label>
+//       <Field placeholder={placeholder} {...field} />
+//       <div style={{ color:'red' }}>
+//         <ErrorMessage name={field.name} />
+//       </div>
+//     </Form.Field>
+//   )
+  
+// );
+
+
 
 export const DiagnosisSelection = ({
   diagnoses,

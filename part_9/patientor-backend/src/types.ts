@@ -19,7 +19,6 @@ export enum EntryType {
 interface BaseEntry {
     id: string;
     date: string;
-    // type: string;
     type: EntryType;
     specialist: string;
     description: string;
@@ -59,7 +58,9 @@ export interface OccupationalHealthcareEntry extends BaseEntry {
     sickLeave?: SickLeave;
 }
 
-
+export type NewHealthCheckEntry = Omit<HealthCheckEntry, "id">;
+export type NewHospitalEntry = Omit<HospitalEntry, "id">;
+export type NewOccupationalHealthcareEntry = Omit<OccupationalHealthcareEntry, "id">;
 
 export type Entry =
   | HospitalEntry
