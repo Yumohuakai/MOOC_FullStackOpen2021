@@ -61,13 +61,12 @@ patientR.post('/:id/entries', (req, res) => {
     // res.status(400).send("Something went wrong. Error: the patient is not exist.");   
     res.status(400).json({message: "Something went wrong. Error: the patient is not exist."});   
   } 
-  // console.log("---patientRoute.ts---post---req.body---", req.body);
-  // console.log("---patientRoute.ts---post---req.body.sickLeave---", req.body.sickLeave);
+  console.log("---patientRoute.ts---post---req.body---", req.body);
 
   try {
     let newBody = null;
     let newSickLeave = null;
-
+    
     if (req.body.diagnosisCodes) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const {diagnosisCodes, ...y} = req.body;
@@ -91,6 +90,7 @@ patientR.post('/:id/entries', (req, res) => {
               sickLeave: newSickLeave
             } as NewOccupationalHealthcareEntry
         );
+        console.log("---patientRoute.ts---post---patientService--1---", addedEntryWithDianosisToPatient);
         res.json(addedEntryWithDianosisToPatient);
       } else {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -104,6 +104,7 @@ patientR.post('/:id/entries', (req, res) => {
                 diagnosisCodes: diagnosisCodes as Array<Diagnosis['code']>
               }
           );
+          console.log("---patientRoute.ts---post---patientService--2---", addedEntryWithDianosisToPatient);
           res.json(addedEntryWithDianosisToPatient);
         }
 
@@ -116,6 +117,21 @@ patientR.post('/:id/entries', (req, res) => {
                 diagnosisCodes: diagnosisCodes as Array<Diagnosis['code']>
               }
           );
+          console.log("---patientRoute.ts---post---patientService--3---", addedEntryWithDianosisToPatient);
+          res.json(addedEntryWithDianosisToPatient);
+        }
+
+        if (newBody.type === "OccupationalHealthcare") {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+          const newEntry = toNewOccupationalHealthcareEntry(y);
+          
+          const addedEntryWithDianosisToPatient = patientService.addEntriesToPatient(
+            patient as PatientOrigin, 
+              { ...newEntry,
+                diagnosisCodes: diagnosisCodes as Array<Diagnosis['code']>
+              } as NewOccupationalHealthcareEntry
+          );
+          console.log("---patientRoute.ts---post---patientService--4---", addedEntryWithDianosisToPatient);
           res.json(addedEntryWithDianosisToPatient);
         }
         
@@ -140,6 +156,7 @@ patientR.post('/:id/entries', (req, res) => {
               sickLeave: newSickLeave
             } as NewOccupationalHealthcareEntry
         );
+        console.log("---patientRoute.ts---post---patientService--5---", addedEntryWithDianosisToPatient);
         res.json(addedEntryWithDianosisToPatient);
       } else {
         if (req.body.type === "HealthCheck") {
@@ -149,6 +166,7 @@ patientR.post('/:id/entries', (req, res) => {
             patient as PatientOrigin, 
               { ...newEntry }
           );
+          console.log("---patientRoute.ts---post---patientService--6---", addedEntryWithDianosisToPatient);
           res.json(addedEntryWithDianosisToPatient);
         }
 
@@ -159,6 +177,20 @@ patientR.post('/:id/entries', (req, res) => {
             patient as PatientOrigin, 
               { ...newEntry }
           );
+          console.log("---patientRoute.ts---post---patientService--7---", addedEntryWithDianosisToPatient);
+          res.json(addedEntryWithDianosisToPatient);
+        }
+
+        if (req.body.type === "OccupationalHealthcare") {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+          const newEntry = toNewOccupationalHealthcareEntry(req.body);
+          
+          const addedEntryWithDianosisToPatient = patientService.addEntriesToPatient(
+            patient as PatientOrigin, 
+              { ...newEntry
+              } as NewOccupationalHealthcareEntry
+          );
+          console.log("---patientRoute.ts---post---patientService--8---", addedEntryWithDianosisToPatient);
           res.json(addedEntryWithDianosisToPatient);
         }
         
@@ -174,6 +206,7 @@ patientR.post('/:id/entries', (req, res) => {
     // res.status(400).send(errorMessage);
     res.status(400).json({message: errorMessage});
   }
+  
 });
 
 
