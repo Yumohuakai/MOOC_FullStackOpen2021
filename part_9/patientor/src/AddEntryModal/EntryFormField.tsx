@@ -112,41 +112,6 @@ export const NumberField = ({ field, label, min, max } : NumberProps ) => (
 );
 
 
-// interface SickLeaveProps extends FieldProps {
-//   label: string;
-//   placeholder: string;
-// }
-
-// export const SickLeaveField= ({  
-//     setFieldValue,
-//     setFieldTouched
-//   }: {
-//     setFieldValue: FormikProps<{ sickLeave: string }>["setFieldValue"];
-//     setFieldTouched: FormikProps<{ sickLeave: string }>["setFieldTouched"];
-//   }) => {
-//     const field = "sickLeave";
-//     const onChange = (
-//       _event: React.SyntheticEvent<HTMLElement, Event>,
-//       data: DropdownProps
-//     ) => {
-//       setFieldTouched(field, true);
-//       setFieldValue(field, data.value);
-//     };
-
-//   return (
-//     <Form.Field>
-//       <label>{label}</label>
-//       <Field placeholder={placeholder} {...field} />
-//       <div style={{ color:'red' }}>
-//         <ErrorMessage name={field.name} />
-//       </div>
-//     </Form.Field>
-//   )
-  
-// );
-
-
-
 export const DiagnosisSelection = ({
   diagnoses,
   setFieldValue,

@@ -2,7 +2,7 @@ import React from "react";
 import { Grid, Button } from "semantic-ui-react";
 import { Field, Formik, Form } from "formik";
 
-import { DiagnosisSelection, TextField,  } from "./EntryFormField";
+import { DiagnosisSelection, TextField } from "./EntryFormField";
 import { EntryType, OccupationalHealthcareEntryFormValues } from "../types";
 import { useStateValue } from "../state";
 
@@ -47,8 +47,6 @@ export const AddOHEntryForm = ({ onSubmit, onCancel } : Props ) => {
       }}
     >
       {({ isValid, dirty, setFieldValue, setFieldTouched }) => {
-        console.log("---what is dirty---", dirty);
-        console.log("---what is isValid---", isValid);
         return (
           <Form className="form ui">
             <Field
@@ -82,19 +80,20 @@ export const AddOHEntryForm = ({ onSubmit, onCancel } : Props ) => {
               name="employerName"
               component={TextField}
             />
+
             <Field
               label="Sick leave start date"
               placeholder="YYYY-MM-DD"
               name="sickLeave.startDate"
               component={TextField}
-            />
+            /> 
             <Field
               label="Sick leave end date"
               placeholder="YYYY-MM-DD"
               name="sickLeave.endDate"
               component={TextField}
             />
-            
+
             <DiagnosisSelection
               diagnoses={Object.values(diagnoses)}              
               setFieldValue={setFieldValue}

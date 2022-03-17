@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Header, Icon, Segment, Button, Menu } from "semantic-ui-react";
+import { Header, Icon, Segment, Menu } from "semantic-ui-react";
 
 import axios from "axios";
 import { 
@@ -20,7 +20,7 @@ import { useStateValue } from "../state";
 import { useParams } from 'react-router-dom';
 import { setOnePatient, addEntryToSelectedPatient } from "../state/reducer";
 import { 
-  // AddOccupationalHealthcarEntryModal, 
+  AddOccupationalHealthcarEntryModal, 
   AddHospitalEntryModal, 
   AddHealthCheckEntryModal 
 } from "../AddEntryModal";
@@ -155,6 +155,7 @@ const PatientDetailsPage = () => {
   const handleItemClick = (name: string) => {
     // console.log("---what is selected type---", name);
     setTypeOfEntry(name);
+    openModal();
   };
   
   React.useEffect(() => { 
@@ -249,7 +250,7 @@ const PatientDetailsPage = () => {
           : null
       }
 
-      {/* {
+      {
         typeOfEntry === 'OccupationalHealthcare'
           ? <AddOccupationalHealthcarEntryModal
               modalOpen={modalOpen}
@@ -258,7 +259,7 @@ const PatientDetailsPage = () => {
               onClose={closeModal}
             />
           : null
-      } */}
+      }
       
       <Header as="h4"> Please pick a type to create entry: </Header>
       <Menu>
@@ -278,16 +279,16 @@ const PatientDetailsPage = () => {
           Hospital
         </Menu.Item>
 
-        {/* <Menu.Item
+        <Menu.Item
           name='OccupationalHealthcare'
           active={typeOfEntry === 'OccupationalHealthcare'}
           onClick={() => handleItemClick('OccupationalHealthcare')}
         >
           OccupationalHealthcare
-        </Menu.Item> */}
+        </Menu.Item>
       </Menu>
       
-      <Button onClick={() => openModal()}>Add New Entry</Button>
+      {/* <Button onClick={() => openModal()}>Add New Entry</Button> */}
     </div>
   );
 };
